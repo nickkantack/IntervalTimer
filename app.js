@@ -1,91 +1,70 @@
-// JS file for cycleTracker app
 
-// -------------
-// Variable declarations
-// -------------
-const newPeriodFormEl = document.getElementsByTagName("form")[0];
-const startDateInputEl = document.getElementById("start-date");
-const endDateInputEl = document.getElementById("end-date");
-const pastPeriodContainer = document.getElementById("past-periods");
+const addSetButton = document.getElementById("addSet");
+const stopButton = document.getElementById("stop");
+const playButton = document.getElementById("play");
+const pauseButton = document.getElementById("pause");
 
-// Storage key is an app-wide constant
-const STORAGE_KEY = "period-tracker";
+const setList = document.getElementById("setList");
+const setTemplate = document.getElementById("setTemplate");
 
-// -------------
-// Event Handlers
-// -------------
-newPeriodFormEl.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const startDate = startDateInputEl.value;
-  const endDate = endDateInputEl.value;
-  if (checkDatesInvalid(startDate, endDate)) {
-    return;
-  }
-  storeNewPeriod(startDate, endDate);
-  renderPastPeriods();
-  newPeriodFormEl.reset();
+let indexOfCurrentSet = 0;
+let timerUpdateInterval;
+let isPlaying = false;
+
+addSetButton.addEventListener("click", () => {
+    const setDiv = setTemplate.content.cloneNode(true);
+    setList.insertBefore(setDiv, setList.children.length > 1 ? setList.children[setList.children.length - 2] : setList.firstChild);
 });
 
-// -------------
-// Functionality
-// -------------
+// Pressing the stop button sets all of the timeLeft inputs equal to their allocatedTime counterpart
+stopButton.addEventListener("click", () => {
+    for (let setDiv of setList.children) {
+        const timeLeft = setDiv.getElementsByClassName("timeLeft")[0];
+        const allocatedTime = setDiv.getElementsByClassName("allocatedTime")[0];
+        if (timeLeft && allocatedTime) timeLeft.value = allocatedTime.value;
+    }
+    indexOfCurrentSet = 0;
+    clearInterval(timerUpdateInterval);
+    isPlaying = false;
+});
 
-// 1. Form validation
-function checkDatesInvalid(startDate, endDate) {
-  if (!startDate || !endDate || startDate > endDate) {
-    newPeriodFormEl.reset();
-    return true;
-  }
-  return false;
+// Pausing merely stops the timer and changes the UI to indicate currently paused
+
+// Pressing the play button starts the timer
+playButton.addEventListener("click", () => {
+    if (isPlaying) return;
+    isPlaying = true; 
+    timerUpdateInterval = setInterval(() => {
+        // For now, just decrement the current time
+        let currentTimeLeft = setList.children[indexOfCurrentSet].querySelector("input.timeLeft");
+        let secondsLeft = timeStringToSeconds(currentTimeLeft.value);
+        if (secondsLeft > 1) {
+            currentTimeLeft.value = secondsToTimeString(secondsLeft - 1);
+        } else {
+            // Handle running out of time
+            if (indexOfCurrentSet === setList.children.length - 1) {
+                // Handle ending the workout
+                clearInterval(timerUpdateInterval);
+                isPlaying = false;
+            } else {
+                // Move to the next workout
+                indexOfCurrentSet++;
+                // TODO play tones, update the UI, etc.
+            }
+        }
+    }, 1000);
+});
+
+// TODO add the defocus listener that adds :00 to the time entry if there is no colon (and general validation)
+
+function timeStringToSeconds(timeString) {
+    let parts = timeString.split(":");
+    return 60 * parseInt(parts[0]) + parseInt(parts[1]);
 }
 
-// 2. Get, add, sort, and store data
-function storeNewPeriod(startDate, endDate) {
-  const periods = getAllStoredPeriods();
-  periods.push({ startDate, endDate });
-  periods.sort((a, b) => {
-    return new Date(b.startDate) - new Date(a.startDate);
-  });
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(periods));
+function secondsToTimeString(seconds) {
+    if (seconds < 0) return "0:00";
+    let minutes = Math.floor(seconds / 60);
+    let remainder = seconds - minutes * 60;
+    return `${minutes}:${remainder < 10 ? "0" : ""}${remainder}`;
 }
-
-// 3. Get and parse data
-function getAllStoredPeriods() {
-  const data = window.localStorage.getItem(STORAGE_KEY);
-  const periods = data ? JSON.parse(data) : [];
-  return periods;
-}
-
-// 4. Display data
-function renderPastPeriods() {
-  const pastPeriodHeader = document.createElement("h2");
-  const pastPeriodList = document.createElement("ul");
-  const periods = getAllStoredPeriods();
-  if (periods.length === 0) {
-    return;
-  }
-  pastPeriodContainer.innerHTML = "";
-  pastPeriodHeader.textContent = "Past periods";
-  periods.forEach((period) => {
-    const periodEl = document.createElement("li");
-    periodEl.textContent = `From ${formatDate(
-      period.startDate
-    )} to ${formatDate(period.endDate)}`;
-    pastPeriodList.appendChild(periodEl);
-  });
-
-  pastPeriodContainer.appendChild(pastPeriodHeader);
-  pastPeriodContainer.appendChild(pastPeriodList);
-}
-
-// 5. format dates for display
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", { timeZone: "UTC" });
-}
-
-// -------------
-// Call render on page load
-// -------------
-
-renderPastPeriods();

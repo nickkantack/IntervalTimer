@@ -6,27 +6,29 @@
     <title>Cycle Tracker</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="manifest" href="cycletracker.json" />
-    <link rel="icon" href="icons/circle.svg" />
+    <link rel="icon" href="icons/icon-192.png" />
   </head>
   <body>
-    <h1>Period tracker</h1>
-    <form id="new-period">
-      <fieldset>
-        <legend>Enter your period start and end date</legend>
-        <p>
-          <label for="start-date">Start date</label>
-          <input type="date" id="start-date" required />
-        </p>
-        <p>
-          <label for="end-date">End date</label>
-          <input type="date" id="end-date" required />
-        </p>
-      </fieldset>
-      <p>
-        <button type="submit">Add Period</button>
-      </p>
-    </form>
-    <section id="past-periods"></section>
+    <h2>Interval App</h2>
+    <div id="controlBar">
+      <button id="play">></button>
+      <button id="pause">||</button>
+      <button id="stop">[]</button>
+    </div>
+    <div id="setList">
+      <button id="addSet">+</button>
+    </div>
+
+    <template id="setTemplate">
+      <div class="setDiv">
+        <input class="setName"/>
+        <span>This is a label</span>
+        <input class="allocatedTime" value="3:00"/>
+        <span class="forwardSlash">/</span>
+        <input class="timeLeft" value="2:00"/>
+      </div>
+    </template>
+
     <script src="app.js" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
