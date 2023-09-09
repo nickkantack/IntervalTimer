@@ -71,37 +71,7 @@ saveButton.addEventListener("click", () => {
 });
 
 addSetButton.addEventListener("click", () => {
-    const setDiv = setTemplate.content.cloneNode(true).querySelector(".setDiv");
-    setList.insertBefore(setDiv, setList.lastElementChild);
-    // Set listeners
-    const setName = setDiv.querySelector(".setName")
-    setName.addEventListener("focusout", updateDropdowns);
-    const allocatedTime = setDiv.querySelector(".allocatedTime")
-    allocatedTime.addEventListener("focusout", updateDropdowns);
-    updateSingleDropdown(setDiv.querySelector(".setSelect"), false, DO_IGNORE_LAST);
-    const select = setDiv.querySelector(".setSelect");
-    // Make the select hide itself after being chosen
-    const editSet = setDiv.querySelector(".editSet");
-    editSet.addEventListener("click", () => {
-        select.style.display = "inline";
-        select.focus();
-        editSet.style.display = "none";
-    });
-    ["change", "focusout"].forEach((event) => {
-        select.addEventListener(event, () => {
-            select.style.display = "none";
-            editSet.style.display = "inline";
-            if (!select.value) return;
-            setName.value = select.value.match(/(.*)\s-\s[0-9]+:[0-9]+/)[1];
-            if (setName === "[blank]") setName = "";
-            allocatedTime.value = select.value.match(/.*\s-\s([0-9]+:[0-9]+)/)[1];
-            updateDropdowns();
-        });
-    });
-    const deleteButton = setDiv.querySelector("button.deleteButton");
-    deleteButton.addEventListener("click", () => {
-        setList.removeChild(setDiv);
-    });
+    addSetToList();
 });
 
 // Pressing the stop button sets all of the timeLeft inputs equal to their allocatedTime counterpart
@@ -144,6 +114,44 @@ playButton.addEventListener("click", () => {
 });
 
 // TODO add the defocus listener that adds :00 to the time entry if there is no colon (and general validation)
+
+function addSetToList(setToAddBefore) {
+    const setDiv = setTemplate.content.cloneNode(true).querySelector(".setDiv");
+    setList.insertBefore(setDiv, setToAddBefore ? setToAddBefore : setList.lastElementChild);
+    // Set listeners
+    const setName = setDiv.querySelector(".setName")
+    setName.addEventListener("focusout", updateDropdowns);
+    const allocatedTime = setDiv.querySelector(".allocatedTime")
+    allocatedTime.addEventListener("focusout", updateDropdowns);
+    updateSingleDropdown(setDiv.querySelector(".setSelect"), false, DO_IGNORE_LAST);
+    const select = setDiv.querySelector(".setSelect");
+    // Make the select hide itself after being chosen
+    const editSet = setDiv.querySelector(".editSet");
+    editSet.addEventListener("click", () => {
+        select.style.display = "inline";
+        select.focus();
+        editSet.style.display = "none";
+    });
+    ["change", "focusout"].forEach((event) => {
+        select.addEventListener(event, () => {
+            select.style.display = "none";
+            editSet.style.display = "inline";
+            if (!select.value) return;
+            setName.value = select.value.match(/(.*)\s-\s[0-9]+:[0-9]+/)[1];
+            if (setName === "[blank]") setName = "";
+            allocatedTime.value = select.value.match(/.*\s-\s([0-9]+:[0-9]+)/)[1];
+            updateDropdowns();
+        });
+    });
+    const deleteButton = setDiv.querySelector("button.deleteButton");
+    deleteButton.addEventListener("click", () => {
+        setList.removeChild(setDiv);
+    });
+    const insertAbove = setDiv.querySelector("button.insertAbove");
+    insertAbove.addEventListener("click", () => {
+        addSetToList(setDiv);
+    });
+}
 
 function timeStringToSeconds(timeString) {
     let parts = timeString.split(":");
