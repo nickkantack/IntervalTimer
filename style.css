@@ -42,6 +42,9 @@ input {
   margin-right: 3px;
   margin-left: 3px;
 }
+.setSelect {
+  display: none;
+}
 #workoutList {
   width: 100%;
   overflow-y: scroll;

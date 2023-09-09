@@ -1,4 +1,6 @@
 
+const DO_IGNORE_LAST = true;
+
 const addSetButton = document.getElementById("addSet");
 const stopButton = document.getElementById("stop");
 const playButton = document.getElementById("play");
@@ -12,8 +14,20 @@ let timerUpdateInterval;
 let isPlaying = false;
 
 addSetButton.addEventListener("click", () => {
-    const setDiv = setTemplate.content.cloneNode(true);
-    setList.insertBefore(setDiv, setList.children.length > 1 ? setList.children[setList.children.length - 2] : setList.firstChild);
+    const setDiv = setTemplate.content.cloneNode(true).querySelector(".setDiv");
+    setList.insertBefore(setDiv, setList.lastElementChild);
+    // Set listeners
+    const setName = setDiv.querySelector(".setName")
+    setName.addEventListener("focusout", updateDropdowns);
+    const allocatedTime = setDiv.querySelector(".allocatedTime")
+    allocatedTime.addEventListener("focusout", updateDropdowns);
+    updateSingleDropdown(setDiv.querySelector(".setSelect"), false, DO_IGNORE_LAST);
+    const select = setDiv.querySelector(".setSelect")
+    // Make the select hide itself after being chosen
+    select.addEventListener("change", () => {
+        select.style.display = "none";
+        const parts = select.value.split(" - ");
+    });
 });
 
 // Pressing the stop button sets all of the timeLeft inputs equal to their allocatedTime counterpart
@@ -67,4 +81,48 @@ function secondsToTimeString(seconds) {
     let minutes = Math.floor(seconds / 60);
     let remainder = seconds - minutes * 60;
     return `${minutes}:${remainder < 10 ? "0" : ""}${remainder}`;
+}
+
+function updateDropdowns() {
+    const knownSets = getKnownSets();
+    for (let select of setList.querySelectorAll(".setSelect")) {
+        updateSingleDropdown(select, knownSets);
+    }
+}
+
+function getKnownSets(shouldIgnoreLast) {
+    const knownSets = new Set();
+    knownSets.add("Custom entry - 0:00");
+    const delimiter = " - ";
+    const setDivs = setList.querySelectorAll(".setDiv");
+    console.log(setDivs);
+    for (let i = 0; i < (shouldIgnoreLast ? setDivs.length - 1 : setDivs.length); i++) {
+        console.log(i);
+        const setDiv = setDivs[i];
+        let nameInput = setDiv.querySelector(".setName");
+        let allocatedTimeInput = setDiv.querySelector(".allocatedTime");
+        if (!nameInput) {
+            console.error("Failed to find set name");
+            continue;
+        }
+        if (!allocatedTimeInput) {
+            console.error("Failed to find allocated time input");
+            continue;
+        }
+        const name = nameInput.value === "" ? "[blank]" : nameInput.value;
+        let key = `${name}${delimiter}${allocatedTimeInput.value}`;
+        knownSets.add(key);
+    }
+    return knownSets;
+}
+
+function updateSingleDropdown(select, knownSets, shouldIgnoreLast) {
+    if (!knownSets) knownSets = getKnownSets(shouldIgnoreLast);
+    for (let child of select.children) select.removeChild(child);
+    for (let knownSet of knownSets) {
+        const opt = document.createElement("option");
+        opt.value = knownSet;
+        opt.innerHTML = knownSet;
+        select.appendChild(opt);
+    }
 }
