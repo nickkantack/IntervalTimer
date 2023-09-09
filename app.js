@@ -98,6 +98,10 @@ addSetButton.addEventListener("click", () => {
             updateDropdowns();
         });
     });
+    const deleteButton = setDiv.querySelector("button.deleteButton");
+    deleteButton.addEventListener("click", () => {
+        setList.removeChild(setDiv);
+    });
 });
 
 // Pressing the stop button sets all of the timeLeft inputs equal to their allocatedTime counterpart
