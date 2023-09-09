@@ -54,7 +54,7 @@ loadButton.addEventListener("click", () => {
 
     // Create a select for each workout found from storage
     if (workoutsDataObject.workouts.length === 0) {
-        noWorkoutsToLoadDialog.style.display = "block";
+        showToast("Cannot load a workout because there are no workouts saved on this device.", TOAST_TYPE_FAILURE);
         return;
     }
 
@@ -71,7 +71,8 @@ workoutSelect.addEventListener("change", () => {
 
 saveButton.addEventListener("click", () => {
     // TODO is there a concern with saving while the workoutSelect is showing?
-    window.localStorage.setItem(workoutKey, serializedCurrentWorkout());
+    // window.localStorage.setItem(workoutKey, serializeCurrentWorkout());
+    showToast("Successfully saved!", TOAST_TYPE_SUCCESS);
 });
 
 addSetButton.addEventListener("click", () => {

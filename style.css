@@ -22,7 +22,7 @@ input {
   font-size: 20px;
 }
 .setDiv {
-  width: 100%; 
+  width: 100%;
 }
 .setName {
   width: 98%;
@@ -64,6 +64,22 @@ input {
   margin-top: 30%;
   margin-left: 50%;
   transform: translate(-50%, -50%);
+}
+.toast {
+  border-radius: 7px;
+  padding: 10px;
+  position: absolute;
+  bottom: 30px;
+  width: 60%;
+  left: -100%;
+  transform: translate(-50%, 0);
+  transition: 0.5s;
+}
+.successToast {
+  background: #080;
+}
+.failureToast {
+  background: #B00;
 }
 
 
