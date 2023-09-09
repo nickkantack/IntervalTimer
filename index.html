@@ -10,6 +10,17 @@
   </head>
   <body>
     <h2>Interval App</h2>
+
+    <!-- Workout management bar -->
+    <div id="workoutManagementBar">
+      <label>Workout:</label>
+      <label id="workoutTitleLabel">Untitled workout</label>
+      <input id="workoutTitle" value="Untitled workout"/>
+      <br/>
+      <button id="loadWorkout">Load</button><select id="workoutSelect"></select>
+      <button id="saveWorkout">Save</button>
+    </div>
+
     <div id="controlBar">
       <button id="play">></button>
       <button id="pause">||</button>
@@ -31,6 +42,7 @@
     </template>
 
     <script src="app.js" defer></script>
+    <script src="workoutSerializer.js" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("sw.js");

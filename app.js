@@ -1,10 +1,29 @@
 
 const DO_IGNORE_LAST = true;
+const workoutKey = "IntervalTimer.workouts";
+/*
+The data stored under the key above should be in the format
+{
+    workouts: [
+        {
+            title: "string",
+            sets: [
+                ["string - setName", "string - allocatedTime"]
+            ]
+        }
+    ]
+}
+*/
 
 const addSetButton = document.getElementById("addSet");
 const stopButton = document.getElementById("stop");
 const playButton = document.getElementById("play");
 const pauseButton = document.getElementById("pause");
+const workoutTitle = document.getElementById("workoutTitle");
+const workoutTitleLabel = document.getElementById("workoutTitleLabel");
+const workoutSelect = document.getElementById("workoutSelect");
+const loadButton = document.getElementById("loadWorkout");
+const saveButton = document.getElementById("saveWorkout");
 
 const setList = document.getElementById("setList");
 const setTemplate = document.getElementById("setTemplate");
@@ -12,6 +31,44 @@ const setTemplate = document.getElementById("setTemplate");
 let indexOfCurrentSet = 0;
 let timerUpdateInterval;
 let isPlaying = false;
+
+workoutTitleLabel.addEventListener("click", () => {
+    workoutTitle.style.display = "inline";
+    workoutTitle.focus();
+    workoutTitleLabel.style.display = "none";
+});
+workoutTitle.addEventListener("focusout", () => {
+    workoutTitle.style.display = "none";
+    workoutTitleLabel.style.display = "inline";
+    workoutTitleLabel.innerHTML = workoutTitle.value;
+});
+
+loadButton.addEventListener("click", () => {
+    // Should read in all workouts from local storage if they are not cached, and probably should cache
+    // them and only update the cache when a save operation occurs
+    const workoutsJson = window.localStorage.getItem(workoutKey);
+    if (!workoutsJson) {
+        console.error("Loaded null workout key. Should warn the user. For now, just using empty list");
+    }
+    const deserializedObject = workoutsJson ? JSON.parse(workoutsJson) : { workouts: [] };
+    // Create a select for each workout found from storage
+
+
+    // TODO if there are no workouts, show a dialog and then return rather than showing the select.
+
+    workoutSelect.style.display = "inline";
+    loadButton.style.display = "none";
+    workoutSelect.focus();
+});
+workoutSelect.addEventListener("change", () => {
+    workoutSelect.style.display = "none";
+    loadButton.style.display = "inline";
+});
+
+saveButton.addEventListener("click", () => {
+    // TODO is there a concern with saving while the workoutSelect is showing?
+    window.localStorage.setItem(workoutKey, serializedCurrentWorkout());
+});
 
 addSetButton.addEventListener("click", () => {
     const setDiv = setTemplate.content.cloneNode(true).querySelector(".setDiv");
@@ -27,15 +84,19 @@ addSetButton.addEventListener("click", () => {
     const editSet = setDiv.querySelector(".editSet");
     editSet.addEventListener("click", () => {
         select.style.display = "inline";
+        select.focus();
         editSet.style.display = "none";
     });
-    select.addEventListener("change", () => {
-        select.style.display = "none";
-        editSet.style.display = "inline";
-        setName.value = select.value.match(/(.*)\s-\s[0-9]+:[0-9]+/)[1];
-        if (setName === "[blank]") setName = "";
-        allocatedTime.value = select.value.match(/.*\s-\s([0-9]+:[0-9]+)/)[1];
-        updateDropdowns();
+    ["change", "focusout"].forEach((event) => {
+        select.addEventListener(event, () => {
+            select.style.display = "none";
+            editSet.style.display = "inline";
+            if (!select.value) return;
+            setName.value = select.value.match(/(.*)\s-\s[0-9]+:[0-9]+/)[1];
+            if (setName === "[blank]") setName = "";
+            allocatedTime.value = select.value.match(/.*\s-\s([0-9]+:[0-9]+)/)[1];
+            updateDropdowns();
+        });
     });
 });
 
@@ -128,10 +189,12 @@ function getKnownSets(shouldIgnoreLast) {
 function updateSingleDropdown(select, knownSets, shouldIgnoreLast) {
     if (!knownSets) knownSets = getKnownSets(shouldIgnoreLast);
     for (let i = select.children.length - 1; i >= 0; i--) select.remove(i);
-    for (let knownSet of knownSets) {
-        const opt = document.createElement("option");
-        opt.value = knownSet;
-        opt.innerHTML = knownSet;
-        select.appendChild(opt);
-    }
+    for (let knownSet of knownSets) appendOptionToSelect(knownSet, select);
+}
+
+function appendOptionToSelect(optionName, select) {
+    const opt = document.createElement("option");
+    opt.value = optionName;
+    opt.innerHTML = optionName;
+    select.appendChild(opt);
 }

@@ -45,6 +45,12 @@ input {
 .setSelect {
   display: none;
 }
+#workoutSelect {
+  display: none;
+}
+#workoutTitle {
+  display :none;
+}
 #workoutList {
   width: 100%;
   overflow-y: scroll;
