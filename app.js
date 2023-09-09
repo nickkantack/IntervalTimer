@@ -1,6 +1,7 @@
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
+const workoutsDataObject = window.localStorage.getItem(workoutKey) ? window.localStorage.getItem(workoutKey) : { workouts: [] };
 /*
 The data stored under the key above should be in the format
 {
@@ -24,9 +25,15 @@ const workoutTitleLabel = document.getElementById("workoutTitleLabel");
 const workoutSelect = document.getElementById("workoutSelect");
 const loadButton = document.getElementById("loadWorkout");
 const saveButton = document.getElementById("saveWorkout");
+const loadWorkoutCancel = document.getElementById("loadWorkoutCancel");
+const workoutLoadPage = document.getElementById("workoutLoadPage");
 
 const setList = document.getElementById("setList");
+const workoutEditor = document.getElementById("workoutEditor");
 const setTemplate = document.getElementById("setTemplate");
+
+// Dialogs
+const noWorkoutsToLoadDialog = document.getElementById("noWorkoutsToLoadDialog");
 
 let indexOfCurrentSet = 0;
 let timerUpdateInterval;
@@ -44,25 +51,22 @@ workoutTitle.addEventListener("focusout", () => {
 });
 
 loadButton.addEventListener("click", () => {
-    // Should read in all workouts from local storage if they are not cached, and probably should cache
-    // them and only update the cache when a save operation occurs
-    const workoutsJson = window.localStorage.getItem(workoutKey);
-    if (!workoutsJson) {
-        console.error("Loaded null workout key. Should warn the user. For now, just using empty list");
-    }
-    const deserializedObject = workoutsJson ? JSON.parse(workoutsJson) : { workouts: [] };
-    // Create a select for each workout found from storage
 
+    // Create a select for each workout found from storage
+    if (workoutsDataObject.workouts.length === 0) {
+        noWorkoutsToLoadDialog.style.display = "block";
+        return;
+    }
 
     // TODO if there are no workouts, show a dialog and then return rather than showing the select.
 
-    workoutSelect.style.display = "inline";
-    loadButton.style.display = "none";
+    workoutLoadPage.style.display = "block";
+    workoutEditor.style.display = "none";
     workoutSelect.focus();
 });
 workoutSelect.addEventListener("change", () => {
-    workoutSelect.style.display = "none";
-    loadButton.style.display = "inline";
+    workoutLoadPage.style.display = "none";
+    workoutEditor.style.display = "bloc";
 });
 
 saveButton.addEventListener("click", () => {
@@ -84,6 +88,11 @@ stopButton.addEventListener("click", () => {
     indexOfCurrentSet = 0;
     clearInterval(timerUpdateInterval);
     isPlaying = false;
+});
+
+loadWorkoutCancel.addEventListener("click", () => {
+    workoutLoadPage.style.display = "none";
+    workoutEditor.style.display = "block";
 });
 
 // Pausing merely stops the timer and changes the UI to indicate currently paused

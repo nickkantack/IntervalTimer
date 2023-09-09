@@ -45,9 +45,28 @@ input {
 .setSelect {
   display: none;
 }
-#workoutSelect {
-  display: none;
+.justOkButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 20px;
+  display: block;
 }
+.dialog {
+  display: none;
+  position: fixed;
+  background: #222;
+  border: 2px solid #555;
+  box-shadow: 3px 3px 3px #000;
+  padding: 10px;
+  width: 80%;
+  height: 80%;
+  margin-top: 30%;
+  margin-left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
 #workoutTitle {
   display :none;
 }
@@ -59,4 +78,9 @@ input {
   width: 100%;
   font-size: 24px;
   border-width: 0;
+}
+#workoutLoadPage {
+  display: none;
+  background: #f00;
+  width: 100%;
 }

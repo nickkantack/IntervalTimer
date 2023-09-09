@@ -17,24 +17,38 @@
       <label id="workoutTitleLabel">Untitled workout</label>
       <input id="workoutTitle" value="Untitled workout"/>
       <br/>
-      <button id="loadWorkout">Load</button><select id="workoutSelect"></select>
+      <button id="loadWorkout">Load</button>
       <button id="saveWorkout">Save</button>
     </div>
 
-    <div id="controlBar">
-      <button id="play">></button>
-      <button id="pause">||</button>
-      <button id="stop">[]</button>
+    <div id="workoutEditor">
+      <div id="controlBar">
+        <button id="play">></button>
+        <button id="pause">||</button>
+        <button id="stop">[]</button>
+      </div>
+      <div id="setList">
+        <button id="addSet">+</button>
+      </div>
     </div>
-    <div id="setList">
-      <button id="addSet">+</button>
+
+    <div id="workoutLoadPage">
+      <select id="workoutSelect"></select>
+      <button id="loadWorkoutCancel">Cancel</button>
+    </div>
+
+    <div id="noWorkoutsToLoadDialog" class="justOkDialog dialog">
+      <p>
+        There are no workouts saved on this device. You will need to save a workout before you can 
+        use the load feature.
+      </p>
     </div>
 
     <template id="setTemplate">
       <div class="setDiv">
         <input class="setName"/>
         <select class="setSelect"></select>
-        <button class="editSet">Copy from other</button>
+        <button class="editSet">Copy</button>
         <input class="allocatedTime" value="3:00"/>
         <span class="forwardSlash">/</span>
         <input class="timeLeft" value="2:00"/>
@@ -45,6 +59,7 @@
 
     <script src="app.js" defer></script>
     <script src="workoutSerializer.js" defer></script>
+    <script src="dialogEquipper.js" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("sw.js");
