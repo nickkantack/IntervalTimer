@@ -22,11 +22,20 @@ addSetButton.addEventListener("click", () => {
     const allocatedTime = setDiv.querySelector(".allocatedTime")
     allocatedTime.addEventListener("focusout", updateDropdowns);
     updateSingleDropdown(setDiv.querySelector(".setSelect"), false, DO_IGNORE_LAST);
-    const select = setDiv.querySelector(".setSelect")
+    const select = setDiv.querySelector(".setSelect");
     // Make the select hide itself after being chosen
+    const editSet = setDiv.querySelector(".editSet");
+    editSet.addEventListener("click", () => {
+        select.style.display = "inline";
+        editSet.style.display = "none";
+    });
     select.addEventListener("change", () => {
         select.style.display = "none";
-        const parts = select.value.split(" - ");
+        editSet.style.display = "inline";
+        setName.value = select.value.match(/(.*)\s-\s[0-9]+:[0-9]+/)[1];
+        if (setName === "[blank]") setName = "";
+        allocatedTime.value = select.value.match(/.*\s-\s([0-9]+:[0-9]+)/)[1];
+        updateDropdowns();
     });
 });
 
@@ -92,7 +101,7 @@ function updateDropdowns() {
 
 function getKnownSets(shouldIgnoreLast) {
     const knownSets = new Set();
-    knownSets.add("Custom entry - 0:00");
+    knownSets.add("");
     const delimiter = " - ";
     const setDivs = setList.querySelectorAll(".setDiv");
     console.log(setDivs);
@@ -118,7 +127,7 @@ function getKnownSets(shouldIgnoreLast) {
 
 function updateSingleDropdown(select, knownSets, shouldIgnoreLast) {
     if (!knownSets) knownSets = getKnownSets(shouldIgnoreLast);
-    for (let child of select.children) select.removeChild(child);
+    for (let i = select.children.length - 1; i >= 0; i--) select.remove(i);
     for (let knownSet of knownSets) {
         const opt = document.createElement("option");
         opt.value = knownSet;
