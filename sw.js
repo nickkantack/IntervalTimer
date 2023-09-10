@@ -64,6 +64,7 @@ self.addEventListener("fetch", (event) => {
         return cachedResponse;
       } else {
         // If resource isn't in the cache, return a 404.
+        console.log("This is the service worker intentionally returning a 404");
         return new Response(null, { status: 404 });
       }
     })()
