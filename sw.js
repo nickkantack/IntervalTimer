@@ -6,7 +6,6 @@ const CACHE_NAME = `interval-timer-${VERSION}`;
 
 // The static resources that the app needs to function.
 const APP_STATIC_RESOURCES = [
-  "/IntervalTimer/",
   "/IntervalTimer/intervalTimer.json",
   "/IntervalTimer/index.html",
   "/IntervalTimer/app.js",
