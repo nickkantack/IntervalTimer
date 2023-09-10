@@ -6,16 +6,16 @@ const CACHE_NAME = `interval-timer-${VERSION}`;
 
 // The static resources that the app needs to function.
 const APP_STATIC_RESOURCES = [
-  "IntervalTimer/",
-  "IntervalTimer/intervalTimer.json",
-  "IntervalTimer/index.html",
-  "IntervalTimer/app.js",
-  "IntervalTimer/toaster.js",
-  "IntervalTimer/workoutSerializer.js",
-  "IntervalTimer/dialogEquipper.js",
-  "IntervalTimer/icon-192.png",
-  "IntervalTimer/icon-512.png",
-  "IntervalTimer/style.css",
+  "/IntervalTimer/",
+  "/IntervalTimer/intervalTimer.json",
+  "/IntervalTimer/index.html",
+  "/IntervalTimer/app.js",
+  "/IntervalTimer/toaster.js",
+  "/IntervalTimer/workoutSerializer.js",
+  "/IntervalTimer/dialogEquipper.js",
+  "/IntervalTimer/icon-192.png",
+  "/IntervalTimer/icon-512.png",
+  "/IntervalTimer/style.css",
 ];
 
 // On install, cache the static resources
@@ -50,7 +50,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   // As a single page app, direct app to always go to cached home page.
   if (event.request.mode === "navigate") {
-    event.respondWith(caches.match("IntervalTimer/index.html"));
+    event.respondWith(caches.match("/IntervalTimer/index.html"));
     return;
   }
 
@@ -64,6 +64,8 @@ self.addEventListener("fetch", (event) => {
         return cachedResponse;
       } else {
         // If resource isn't in the cache, return a 404.
+        console.log(event);
+        console.log(cache);
         console.log("This is the service worker intentionally returning a 404");
         return new Response(null, { status: 404 });
       }
