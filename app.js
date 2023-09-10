@@ -27,7 +27,7 @@ const loadWorkoutCancel = document.getElementById("loadWorkoutCancel");
 const workoutLoadPage = document.getElementById("workoutLoadPage");
 const workoutPlayer = document.getElementById("workoutPlayer");
 const openWorkoutPlayer = document.getElementById("openWorkoutPlayer");
-const workoutPlayerBack = document.getElementById("workoutPLayerBack");
+const workoutPlayerBack = document.getElementById("workoutPlayerBack");
 const workoutPlayerPause = document.getElementById("workoutPlayerPause");
 const workoutPlayerPlay = document.getElementById("workoutPlayerPlay");
 const workoutPlayerNext = document.getElementById("workoutPLayerNext");
@@ -47,6 +47,7 @@ const noWorkoutsToLoadDialog = document.getElementById("noWorkoutsToLoadDialog")
 let indexOfCurrentSet = 0;
 let timerUpdateInterval;
 let isPlaying = false;
+let isPaused = false;
 
 openWorkoutPlayer.addEventListener("click", () => {
     workoutPlayer.style.display = "block";
@@ -64,6 +65,18 @@ workoutTitle.addEventListener("focusout", () => {
     workoutTitle.style.display = "none";
     workoutTitleLabel.style.display = "inline";
     workoutTitleLabel.innerHTML = workoutTitle.value;
+});
+
+workoutPlayerBack.addEventListener("click", () => {
+    if (indexOfCurrentSet > 0) {
+        const previousSetDiv = setList.children[indexOfCurrentSet - 1];
+        const previousSetTimeLeft = previousSetDiv.querySelector(".timeLeft");
+        if (previousSetTimeLeft.value === "0:00") previousSetTimeLeft.value = previousSetDiv.querySelector(".allocatedTime").value;
+        indexOfCurrentSet--;
+        updatePlayer();
+    } else {
+        showToast("There is no earlier set to go back to.", TOAST_TYPE_FAILURE);
+    }
 });
 
 loadButton.addEventListener("click", () => {
@@ -117,6 +130,7 @@ stopButton.addEventListener("click", () => {
     indexOfCurrentSet = 0;
     clearInterval(timerUpdateInterval);
     isPlaying = false;
+    isPaused = false;
 });
 
 loadWorkoutCancel.addEventListener("click", () => {
@@ -127,41 +141,44 @@ loadWorkoutCancel.addEventListener("click", () => {
 // Pausing merely stops the timer and changes the UI to indicate currently paused
 pauseButton.addEventListener("click", () => {
     isPlaying = false;
+    isPaused = true;
     clearInterval(timerUpdateInterval);
     setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
     setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPaused");
 });
 
 // Pressing the play button starts the timer
-playButton.addEventListener("click", () => {
-    if (isPlaying) return;
-    isPlaying = true; 
-    setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
-    setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
-    updatePlayer();
-    timerUpdateInterval = setInterval(() => {
-        // For now, just decrement the current time
-        let currentTimeLeft = setList.children[indexOfCurrentSet].querySelector("input.timeLeft");
-        let secondsLeft = timeStringToSeconds(currentTimeLeft.value);
-        if (secondsLeft > 0) {
-            currentTimeLeft.value = secondsToTimeString(secondsLeft - 1);
-            updatePlayer();
-        } else {
-            // Handle running out of time
-            setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
-            setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
-            if (indexOfCurrentSet === setList.children.length - 2) {
-                // Handle ending the workout
-                stopButton.click();
+[playButton, workoutPlayerPlay].forEach((button) => {
+    button.addEventListener("click", () => {
+        if (isPlaying) return;
+        isPlaying = true; 
+        setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
+        setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
+        updatePlayer();
+        timerUpdateInterval = setInterval(() => {
+            // For now, just decrement the current time
+            let currentTimeLeft = setList.children[indexOfCurrentSet].querySelector("input.timeLeft");
+            let secondsLeft = timeStringToSeconds(currentTimeLeft.value);
+            if (secondsLeft > 0) {
+                currentTimeLeft.value = secondsToTimeString(secondsLeft - 1);
                 updatePlayer();
             } else {
-                // Move to the next workout
-                indexOfCurrentSet++;
-                // TODO play tones, update the UI, etc.
-                setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
+                // Handle running out of time
+                setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
+                setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
+                if (indexOfCurrentSet === setList.children.length - 2) {
+                    // Handle ending the workout
+                    stopButton.click();
+                    updatePlayer();
+                } else {
+                    // Move to the next workout
+                    indexOfCurrentSet++;
+                    // TODO play tones, update the UI, etc.
+                    setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
+                }
             }
-        }
-    }, 1000);
+        }, 1000);
+    });
 });
 
 function updatePlayer() {
@@ -267,4 +284,15 @@ function appendOptionToSelect(optionName, select) {
     opt.value = optionName;
     opt.innerHTML = optionName;
     select.appendChild(opt);
+}
+
+function updatePlayAndPauseColors() {
+    // TODO unpaint all setName inputs then paint only the current one
+    for (let setName of setList.querySelector(".setName")) {
+        setName.classList.remove("currentSetPlaying");
+        setName.classList.remove("currentSetPaused");
+    }
+    const currentSetName = setList.children[indexOfCurrentSet].querySelector(".setName");
+    if (isPlaying) currentSetName.classList.add("currentSetPlaying");
+    if (isPaused) currentSetName.classList.add("currentSetPaused");
 }

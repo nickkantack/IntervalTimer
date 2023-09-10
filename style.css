@@ -127,3 +127,6 @@ input {
   top: 20px;
   left: 20px;
 }
+#currentSetName {
+  font-size: 30px;
+}
