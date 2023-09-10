@@ -1,17 +1,15 @@
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
-const workoutsDataObject = window.localStorage.getItem(workoutKey) ? window.localStorage.getItem(workoutKey) : { workouts: [] };
+let workoutsDataObject = window.localStorage.getItem(workoutKey) ? window.localStorage.getItem(workoutKey) : "{}";
+workoutsDataObject = JSON.parse(workoutsDataObject);
 /*
 The data stored under the key above should be in the format
 {
-    workouts: [
-        {
-            title: "string",
-            sets: [
+    workouts: {
+        "workoutA": [
                 ["string - setName", "string - allocatedTime"]
-            ]
-        }
+        ]
     ]
 }
 */
@@ -51,14 +49,17 @@ workoutTitle.addEventListener("focusout", () => {
 });
 
 loadButton.addEventListener("click", () => {
-
     // Create a select for each workout found from storage
-    if (workoutsDataObject.workouts.length === 0) {
+    if (Object.keys(workoutsDataObject).length === 0) {
         showToast("Cannot load a workout because there are no workouts saved on this device.", TOAST_TYPE_FAILURE);
         return;
     }
 
-    // TODO if there are no workouts, show a dialog and then return rather than showing the select.
+    for (let oldOption of workoutSelect.querySelectorAll("option")) workoutSelect.remove(oldOption);
+    appendOptionToSelect("None selected", workoutSelect);
+    for (let workoutTitle of Object.keys(workoutsDataObject)) {
+        appendOptionToSelect(workoutTitle, workoutSelect);
+    }
 
     workoutLoadPage.style.display = "block";
     workoutEditor.style.display = "none";
@@ -66,12 +67,18 @@ loadButton.addEventListener("click", () => {
 });
 workoutSelect.addEventListener("change", () => {
     workoutLoadPage.style.display = "none";
-    workoutEditor.style.display = "bloc";
+    workoutEditor.style.display = "block";
+    applyWorkoutAsArrayToApp(workoutSelect.value, workoutsDataObject[workoutSelect.value]);
 });
 
 saveButton.addEventListener("click", () => {
+    if (setList.children.length === 1) {
+        showToast("You cannot save a workout that has no sets in it.", TOAST_TYPE_FAILURE);
+        return;
+    }
     // TODO is there a concern with saving while the workoutSelect is showing?
-    // window.localStorage.setItem(workoutKey, serializeCurrentWorkout());
+    workoutsDataObject[workoutTitleLabel.innerHTML] = convertCurrentWorkoutToArray();
+    window.localStorage.setItem(workoutKey, JSON.stringify(workoutsDataObject));
     showToast("Successfully saved!", TOAST_TYPE_SUCCESS);
 });
 
@@ -161,6 +168,7 @@ function addSetToList(setToAddBefore) {
     insertAbove.addEventListener("click", () => {
         addSetToList(setDiv);
     });
+    return setDiv;
 }
 
 function timeStringToSeconds(timeString) {
@@ -187,9 +195,7 @@ function getKnownSets(shouldIgnoreLast) {
     knownSets.add("");
     const delimiter = " - ";
     const setDivs = setList.querySelectorAll(".setDiv");
-    console.log(setDivs);
     for (let i = 0; i < (shouldIgnoreLast ? setDivs.length - 1 : setDivs.length); i++) {
-        console.log(i);
         const setDiv = setDivs[i];
         let nameInput = setDiv.querySelector(".setName");
         let allocatedTimeInput = setDiv.querySelector(".allocatedTime");

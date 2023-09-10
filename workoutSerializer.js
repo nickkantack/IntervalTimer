@@ -1,34 +1,27 @@
 
 /*
 serializedString is JSON in the following format:
-{
-    title: "string",
-    sets: [
-        ["string - name", "string - allocatedTime"],
-        ...
-    ]
-}
+[
+    ["string - name", "string - allocatedTime"],
+    ...
+]
 */
-function serializeCurrentWorkout() {
-    const objectToSerialize = {};
-    objectToSerialize.title = workoutTitleLabel.innerHTML;
-    objectToSerialize.sets = [];
+function convertCurrentWorkoutToArray() {
+    const objectToSerialize = [];
     for (let setDiv of setList.querySelectorAll(".setDiv")) {
-        objectToSerialize.sets.push([
+        objectToSerialize.push([
             setDiv.querySelector(".setName").value,
             setDiv.querySelector(".allocatedTime").value
         ]);
     }
-    return JSON.stringify(objectToSerialize);
+    return objectToSerialize;
 }
 
-function applySerializedWorkoutToApp(serializedString) {
-    const deserializedObject = JSON.parse(serializedString);
-    workoutTitleLabel.innerHTML = deserializedObject.title;
-    for (let oldSet of setList.querySelectorAll(".setDiv")) setList.remove(oldSet);
-    for (let list of deserializedObject.sets) {
-        const setDiv = setTemplate.content.cloneNode(true).querySelector(".setDiv");
-        setList.insertBefore(setDiv, setList.lastElementChild);
+function applyWorkoutAsArrayToApp(workoutTitle, workoutAsArray) {
+    workoutTitleLabel.innerHTML = workoutTitle;
+    for (let oldSet of setList.querySelectorAll(".setDiv")) setList.removeChild(oldSet);
+    for (let list of workoutAsArray) {
+        const setDiv = addSetToList();
         setDiv.querySelector(".setName").value = list[0];
         setDiv.querySelector(".timeLeft").value = list[1];
         setDiv.querySelector(".allocatedTime").value = list[1];
