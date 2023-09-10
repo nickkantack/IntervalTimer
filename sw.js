@@ -6,16 +6,16 @@ const CACHE_NAME = `interval-timer-${VERSION}`;
 
 // The static resources that the app needs to function.
 const APP_STATIC_RESOURCES = [
-  "/",
-  "intervalTimer.json",
-  "/index.html",
-  "/app.js",
-  "/toaster.js",
-  "/workoutSerializer.js",
-  "/dialogEquipper.js",
-  "/icon-192.png",
-  "/icon-512.png",
-  "/style.css",
+  "IntervalTimer/",
+  "IntervalTimer/intervalTimer.json",
+  "IntervalTimer/index.html",
+  "IntervalTimer/app.js",
+  "IntervalTimer/toaster.js",
+  "IntervalTimer/workoutSerializer.js",
+  "IntervalTimer/dialogEquipper.js",
+  "IntervalTimer/icon-192.png",
+  "IntervalTimer/icon-512.png",
+  "IntervalTimer/style.css",
 ];
 
 // On install, cache the static resources
@@ -50,7 +50,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   // As a single page app, direct app to always go to cached home page.
   if (event.request.mode === "navigate") {
-    event.respondWith(caches.match("/"));
+    event.respondWith(caches.match("IntervalTimer/index.html"));
     return;
   }
 

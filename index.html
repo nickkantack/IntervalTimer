@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Interval Timer</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="manifest" href="intervalTimer.json" />
-    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="manifest" href="./intervalTimer.json" />
+    <link rel="icon" href="./icon-192.png" />
   </head>
   <body>
     <h2>Interval App</h2>
@@ -76,13 +76,13 @@
       </div>
     </template>
 
-    <script src="app.js" defer></script>
-    <script src="workoutSerializer.js" defer></script>
-    <script src="dialogEquipper.js" defer></script>
-    <script src="toaster.js" defer></script>
+    <script src="./app.js" defer></script>
+    <script src="./workoutSerializer.js" defer></script>
+    <script src="./dialogEquipper.js" defer></script>
+    <script src="./toaster.js" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("sw.js");
+        navigator.serviceWorker.register("./sw.js");
       }
     </script>
   </body>
