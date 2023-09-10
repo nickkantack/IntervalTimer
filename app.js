@@ -51,6 +51,7 @@ let isPaused = false;
 
 openWorkoutPlayer.addEventListener("click", () => {
     workoutPlayer.style.display = "block";
+    playButton.click();
 });
 backToEditor.addEventListener("click", () => {
     workoutPlayer.style.display = "none";
@@ -139,12 +140,14 @@ loadWorkoutCancel.addEventListener("click", () => {
 });
 
 // Pausing merely stops the timer and changes the UI to indicate currently paused
-pauseButton.addEventListener("click", () => {
-    isPlaying = false;
-    isPaused = true;
-    clearInterval(timerUpdateInterval);
-    setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
-    setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPaused");
+[pauseButton, workoutPlayerPause].forEach((button) => {
+    button.addEventListener("click", () => {
+        isPlaying = false;
+        isPaused = true;
+        clearInterval(timerUpdateInterval);
+        setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
+        setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPaused");
+    });
 });
 
 // Pressing the play button starts the timer

@@ -103,7 +103,6 @@ input {
 }
 #workoutLoadPage {
   display: none;
-  background: #f00;
   width: 100%;
 }
 #workoutPlayer {
