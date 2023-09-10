@@ -49,10 +49,6 @@ let timerUpdateInterval;
 let isPlaying = false;
 let isPaused = false;
 
-window.addEventListener("beforeinstallprompt", () => {
-    alert("beforeinstallprompt received");
-});
-
 openWorkoutPlayer.addEventListener("click", () => {
     if (setList.children.length === 1) {
         showToast("Can't open the player on an empty workout.", TOAST_TYPE_FAILURE);
