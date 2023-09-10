@@ -81,6 +81,12 @@ input {
 .failureToast {
   background: #B00;
 }
+.currentSetPlaying {
+  background: #57a;
+}
+.currentSetPaused {
+  background: #663;
+}
 
 
 #workoutTitle {

@@ -104,27 +104,37 @@ loadWorkoutCancel.addEventListener("click", () => {
 });
 
 // Pausing merely stops the timer and changes the UI to indicate currently paused
+pauseButton.addEventListener("click", () => {
+    isPlaying = false;
+    clearInterval(timerUpdateInterval);
+    setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
+    setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPaused");
+});
 
 // Pressing the play button starts the timer
 playButton.addEventListener("click", () => {
     if (isPlaying) return;
     isPlaying = true; 
+    setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
+    setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
     timerUpdateInterval = setInterval(() => {
         // For now, just decrement the current time
         let currentTimeLeft = setList.children[indexOfCurrentSet].querySelector("input.timeLeft");
         let secondsLeft = timeStringToSeconds(currentTimeLeft.value);
-        if (secondsLeft > 1) {
+        if (secondsLeft > 0) {
             currentTimeLeft.value = secondsToTimeString(secondsLeft - 1);
         } else {
             // Handle running out of time
-            if (indexOfCurrentSet === setList.children.length - 1) {
+            setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
+            setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
+            if (indexOfCurrentSet === setList.children.length - 2) {
                 // Handle ending the workout
-                clearInterval(timerUpdateInterval);
-                isPlaying = false;
+                stopButton.click();
             } else {
                 // Move to the next workout
                 indexOfCurrentSet++;
                 // TODO play tones, update the UI, etc.
+                setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
             }
         }
     }, 1000);
