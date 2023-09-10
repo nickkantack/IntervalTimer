@@ -2,7 +2,8 @@
   "name": "Interval Timer",
   "short_name": "IT",
   "description": "Assists in the timing of sets and rests during workouts",
-  "start_url": "/",
+  "start_url": "/IntervalTimer/index.html",
+  "scope": "/IntervalTimer/",
   "icons": [
     {
       "src": "./icon-512.png",
