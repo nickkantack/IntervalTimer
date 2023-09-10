@@ -30,7 +30,7 @@ const openWorkoutPlayer = document.getElementById("openWorkoutPlayer");
 const workoutPlayerBack = document.getElementById("workoutPlayerBack");
 const workoutPlayerPause = document.getElementById("workoutPlayerPause");
 const workoutPlayerPlay = document.getElementById("workoutPlayerPlay");
-const workoutPlayerNext = document.getElementById("workoutPLayerNext");
+const workoutPlayerNext = document.getElementById("workoutPlayerNext");
 const previousSetName = document.getElementById("previousSetName");
 const currentSetName = document.getElementById("currentSetName");
 const currentSetTimeLeft = document.getElementById("currentSetTimeLeft");
@@ -49,7 +49,15 @@ let timerUpdateInterval;
 let isPlaying = false;
 let isPaused = false;
 
+window.addEventListener("beforeinstallprompt", () => {
+    alert("beforeinstallprompt received");
+});
+
 openWorkoutPlayer.addEventListener("click", () => {
+    if (setList.children.length === 1) {
+        showToast("Can't open the player on an empty workout.", TOAST_TYPE_FAILURE);
+        return;
+    }
     workoutPlayer.style.display = "block";
     playButton.click();
 });
@@ -77,6 +85,15 @@ workoutPlayerBack.addEventListener("click", () => {
         updatePlayer();
     } else {
         showToast("There is no earlier set to go back to.", TOAST_TYPE_FAILURE);
+    }
+});
+
+workoutPlayerNext.addEventListener("click", () => {
+    if (indexOfCurrentSet < setList.children.length - 2) {
+        indexOfCurrentSet++;
+        updatePlayer();
+    } else {
+        showToast("There is no later set to advance to.", TOAST_TYPE_FAILURE);
     }
 });
 
