@@ -25,6 +25,17 @@ const loadButton = document.getElementById("loadWorkout");
 const saveButton = document.getElementById("saveWorkout");
 const loadWorkoutCancel = document.getElementById("loadWorkoutCancel");
 const workoutLoadPage = document.getElementById("workoutLoadPage");
+const workoutPlayer = document.getElementById("workoutPlayer");
+const openWorkoutPlayer = document.getElementById("openWorkoutPlayer");
+const workoutPlayerBack = document.getElementById("workoutPLayerBack");
+const workoutPlayerPause = document.getElementById("workoutPlayerPause");
+const workoutPlayerPlay = document.getElementById("workoutPlayerPlay");
+const workoutPlayerNext = document.getElementById("workoutPLayerNext");
+const previousSetName = document.getElementById("previousSetName");
+const currentSetName = document.getElementById("currentSetName");
+const currentSetTimeLeft = document.getElementById("currentSetTimeLeft");
+const nextSetName = document.getElementById("nextSetName");
+const backToEditor = document.getElementById("backToEditor");
 
 const setList = document.getElementById("setList");
 const workoutEditor = document.getElementById("workoutEditor");
@@ -36,6 +47,13 @@ const noWorkoutsToLoadDialog = document.getElementById("noWorkoutsToLoadDialog")
 let indexOfCurrentSet = 0;
 let timerUpdateInterval;
 let isPlaying = false;
+
+openWorkoutPlayer.addEventListener("click", () => {
+    workoutPlayer.style.display = "block";
+});
+backToEditor.addEventListener("click", () => {
+    workoutPlayer.style.display = "none";
+});
 
 workoutTitleLabel.addEventListener("click", () => {
     workoutTitle.style.display = "inline";
@@ -89,8 +107,11 @@ addSetButton.addEventListener("click", () => {
 // Pressing the stop button sets all of the timeLeft inputs equal to their allocatedTime counterpart
 stopButton.addEventListener("click", () => {
     for (let setDiv of setList.children) {
+        if (!setDiv.querySelector(".setName")) continue;
         const timeLeft = setDiv.getElementsByClassName("timeLeft")[0];
         const allocatedTime = setDiv.getElementsByClassName("allocatedTime")[0];
+        setDiv.querySelector(".setName").classList.remove("currentSetPlaying");
+        setDiv.querySelector(".setName").classList.remove("currentSetPaused");
         if (timeLeft && allocatedTime) timeLeft.value = allocatedTime.value;
     }
     indexOfCurrentSet = 0;
@@ -117,12 +138,14 @@ playButton.addEventListener("click", () => {
     isPlaying = true; 
     setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
     setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
+    updatePlayer();
     timerUpdateInterval = setInterval(() => {
         // For now, just decrement the current time
         let currentTimeLeft = setList.children[indexOfCurrentSet].querySelector("input.timeLeft");
         let secondsLeft = timeStringToSeconds(currentTimeLeft.value);
         if (secondsLeft > 0) {
             currentTimeLeft.value = secondsToTimeString(secondsLeft - 1);
+            updatePlayer();
         } else {
             // Handle running out of time
             setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
@@ -130,6 +153,7 @@ playButton.addEventListener("click", () => {
             if (indexOfCurrentSet === setList.children.length - 2) {
                 // Handle ending the workout
                 stopButton.click();
+                updatePlayer();
             } else {
                 // Move to the next workout
                 indexOfCurrentSet++;
@@ -139,6 +163,14 @@ playButton.addEventListener("click", () => {
         }
     }, 1000);
 });
+
+function updatePlayer() {
+    const currentSetDiv = setList.children[indexOfCurrentSet];
+    currentSetTimeLeft.innerHTML = currentSetDiv.querySelector(".timeLeft").value;
+    currentSetName.innerHTML = currentSetDiv.querySelector(".setName").value;
+    previousSetName.innerHTML = indexOfCurrentSet === 0 ? "" : setList.children[indexOfCurrentSet - 1].querySelector(".setName").value;
+    nextSetName.innerHTML = indexOfCurrentSet === setList.children.length - 2 ? "" : setList.children[indexOfCurrentSet + 1].querySelector(".setName").value;
+}
 
 // TODO add the defocus listener that adds :00 to the time entry if there is no colon (and general validation)
 
