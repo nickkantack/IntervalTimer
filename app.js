@@ -49,7 +49,7 @@ let timerUpdateInterval;
 let isPlaying = false;
 let isPaused = false;
 
-openWorkoutPlayer.addEventListener("click", () => {
+    openWorkoutPlayer.addEventListener("click", () => {
     if (setList.children.length === 1) {
         showToast("Can't open the player on an empty workout.", TOAST_TYPE_FAILURE);
         return;
@@ -155,21 +155,22 @@ loadWorkoutCancel.addEventListener("click", () => {
 // Pausing merely stops the timer and changes the UI to indicate currently paused
 [pauseButton, workoutPlayerPause].forEach((button) => {
     button.addEventListener("click", () => {
+        if (setList.children.length === 1) return; // Nothing to do since there are no sets
         isPlaying = false;
         isPaused = true;
         clearInterval(timerUpdateInterval);
-        setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
-        setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPaused");
+        updatePlayAndPauseColors();
     });
 });
 
 // Pressing the play button starts the timer
 [playButton, workoutPlayerPlay].forEach((button) => {
     button.addEventListener("click", () => {
+        if (setList.children.length === 1) return; // Nothing to do since there are no sets
         if (isPlaying) return;
         isPlaying = true; 
-        setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
-        setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
+        isPaused = false;
+        updatePlayAndPauseColors();
         updatePlayer();
         timerUpdateInterval = setInterval(() => {
             // For now, just decrement the current time
@@ -180,8 +181,7 @@ loadWorkoutCancel.addEventListener("click", () => {
                 updatePlayer();
             } else {
                 // Handle running out of time
-                setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPlaying");
-                setList.children[indexOfCurrentSet].querySelector(".setName").classList.remove("currentSetPaused");
+                updatePlayAndPauseColors();
                 if (indexOfCurrentSet === setList.children.length - 2) {
                     // Handle ending the workout
                     stopButton.click();
@@ -189,8 +189,7 @@ loadWorkoutCancel.addEventListener("click", () => {
                 } else {
                     // Move to the next workout
                     indexOfCurrentSet++;
-                    // TODO play tones, update the UI, etc.
-                    setList.children[indexOfCurrentSet].querySelector(".setName").classList.add("currentSetPlaying");
+                    updatePlayAndPauseColors();
                 }
             }
         }, 1000);
@@ -304,7 +303,7 @@ function appendOptionToSelect(optionName, select) {
 
 function updatePlayAndPauseColors() {
     // TODO unpaint all setName inputs then paint only the current one
-    for (let setName of setList.querySelector(".setName")) {
+    for (let setName of setList.querySelectorAll(".setName")) {
         setName.classList.remove("currentSetPlaying");
         setName.classList.remove("currentSetPaused");
     }

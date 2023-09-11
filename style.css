@@ -98,10 +98,25 @@ svg {
 #workoutTitle {
   display :none;
 }
+#workoutManagementBar button,
 #controlBar button {
   width: 1.5em;
   height: 1.5em;
   padding: 0;
+}
+#loadWorkout, #saveWorkout, #openWorkoutPlayer {
+  float: right;
+}
+#workoutManagementBar div {
+  float: left;
+  margin: 3px;
+}
+#workoutEditor {
+  width: 100%;
+}
+#controlBar {
+  display: inline;
+  width: 100%;
 }
 #workoutList {
   width: 100%;
