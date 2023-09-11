@@ -31,10 +31,10 @@ const workoutPlayerBack = document.getElementById("workoutPlayerBack");
 const workoutPlayerPause = document.getElementById("workoutPlayerPause");
 const workoutPlayerPlay = document.getElementById("workoutPlayerPlay");
 const workoutPlayerNext = document.getElementById("workoutPlayerNext");
-const previousSetName = document.getElementById("previousSetName");
 const currentSetName = document.getElementById("currentSetName");
 const currentSetTimeLeft = document.getElementById("currentSetTimeLeft");
 const nextSetName = document.getElementById("nextSetName");
+const upNextLabel = document.getElementById("upNextLabel");
 const backToEditor = document.getElementById("backToEditor");
 
 const setList = document.getElementById("setList");
@@ -74,9 +74,6 @@ workoutTitle.addEventListener("focusout", () => {
 
 workoutPlayerBack.addEventListener("click", () => {
     if (indexOfCurrentSet > 0) {
-        const previousSetDiv = setList.children[indexOfCurrentSet - 1];
-        const previousSetTimeLeft = previousSetDiv.querySelector(".timeLeft");
-        if (previousSetTimeLeft.value === "0:00") previousSetTimeLeft.value = previousSetDiv.querySelector(".allocatedTime").value;
         indexOfCurrentSet--;
         updatePlayer();
     } else {
@@ -200,8 +197,8 @@ function updatePlayer() {
     const currentSetDiv = setList.children[indexOfCurrentSet];
     currentSetTimeLeft.innerHTML = currentSetDiv.querySelector(".timeLeft").value;
     currentSetName.innerHTML = currentSetDiv.querySelector(".setName").value;
-    previousSetName.innerHTML = indexOfCurrentSet === 0 ? "" : setList.children[indexOfCurrentSet - 1].querySelector(".setName").value;
     nextSetName.innerHTML = indexOfCurrentSet === setList.children.length - 2 ? "" : setList.children[indexOfCurrentSet + 1].querySelector(".setName").value;
+    indexOfCurrentSet === setList.children.length - 2 ? upNextLabel.style.display = "none" : upNextLabel.style.display = "block";
 }
 
 // TODO add the defocus listener that adds :00 to the time entry if there is no colon (and general validation)

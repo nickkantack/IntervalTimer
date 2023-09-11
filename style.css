@@ -80,6 +80,7 @@ svg {
   left: -100%;
   transform: translate(-50%, 0);
   transition: 0.5s;
+  box-shadow: 3px 3px 3px #000;
 }
 .successToast {
   background: #080;
@@ -153,7 +154,17 @@ svg {
   left: 20px;
 }
 #currentSetName {
-  font-size: 30px;
+  font-size: 40px;
+}
+#currentSetTimeLeft {
+  font-size: 50px;
+}
+#nextSetName {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+#upNextLabel {
+  font-style: italic;
 }
 #keepAliveVideo {
   display: none;
