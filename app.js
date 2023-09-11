@@ -76,6 +76,7 @@ workoutPlayerBack.addEventListener("click", () => {
     if (indexOfCurrentSet > 0) {
         indexOfCurrentSet--;
         updatePlayer();
+        updateTimeLeftVisibilities();
     } else {
         showToast("There is no earlier set to go back to.", TOAST_TYPE_FAILURE);
     }
@@ -85,12 +86,14 @@ workoutPlayerNext.addEventListener("click", () => {
     if (indexOfCurrentSet < setList.children.length - 2) {
         indexOfCurrentSet++;
         updatePlayer();
+        updateTimeLeftVisibilities();
     } else {
         showToast("There is no later set to advance to.", TOAST_TYPE_FAILURE);
     }
 });
 
 loadButton.addEventListener("click", () => {
+    pauseButton.click();
     // Create a select for each workout found from storage
     if (Object.keys(workoutsDataObject).length === 0) {
         showToast("Cannot load a workout because there are no workouts saved on this device.", TOAST_TYPE_FAILURE);
@@ -142,6 +145,7 @@ stopButton.addEventListener("click", () => {
     clearInterval(timerUpdateInterval);
     isPlaying = false;
     isPaused = false;
+    updateTimeLeftVisibilities();
 });
 
 loadWorkoutCancel.addEventListener("click", () => {
@@ -169,6 +173,7 @@ loadWorkoutCancel.addEventListener("click", () => {
         isPaused = false;
         updatePlayAndPauseColors();
         updatePlayer();
+        updateTimeLeftVisibilities();
         timerUpdateInterval = setInterval(() => {
             // For now, just decrement the current time
             let currentTimeLeft = setList.children[indexOfCurrentSet].querySelector("input.timeLeft");
@@ -187,6 +192,7 @@ loadWorkoutCancel.addEventListener("click", () => {
                     // Move to the next workout
                     indexOfCurrentSet++;
                     updatePlayAndPauseColors();
+                    updateTimeLeftVisibilities();
                 }
             }
         }, 1000);
@@ -296,6 +302,17 @@ function appendOptionToSelect(optionName, select) {
     opt.value = optionName;
     opt.innerHTML = optionName;
     select.appendChild(opt);
+}
+
+function updateTimeLeftVisibilities() {
+    for (let setDiv of setList.querySelectorAll(".setDiv")) {
+        setDiv.querySelector(".timeLeft").style.display = "none";
+        setDiv.querySelector(".forwardSlash").style.display = "none";
+    }
+    if (isPlaying || isPaused) {
+        setList.children[indexOfCurrentSet].querySelector(".timeLeft").style.display = "inline";
+        setList.children[indexOfCurrentSet].querySelector(".forwardSlash").style.display = "inline";
+    }
 }
 
 function updatePlayAndPauseColors() {

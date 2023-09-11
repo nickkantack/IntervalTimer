@@ -35,6 +35,7 @@ svg {
   margin-top: 6px;
 }
 .timeLeft {
+  display: none;
   width: 50px;
   float: right;
 }
@@ -44,6 +45,7 @@ svg {
   margin-left: 3px;
 }
 .forwardSlash {
+  display: none;
   float: right;
   margin-right: 3px;
   margin-left: 3px;
