@@ -156,6 +156,11 @@ select {
   background: #222;
   display: none;
 }
+#workoutPlayer button {
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0;
+}
 #workoutPlayerText {
   position: absolute;
   top: 50%;
