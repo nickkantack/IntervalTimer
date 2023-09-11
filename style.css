@@ -26,6 +26,13 @@ svg {
   height: 100%;
   margin: auto;
 }
+select {
+  background: #222;
+  color: #fff;
+  border-radius: 3px;
+  border: 2px solid #666;
+  font-size: 20px;
+}
 
 .setDiv {
   width: 100%;
