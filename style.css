@@ -155,3 +155,6 @@ svg {
 #currentSetName {
   font-size: 30px;
 }
+#keepAliveVideo {
+  display: none;
+}
