@@ -37,6 +37,11 @@ select {
 .setDiv {
   width: 100%;
 }
+.setDiv button {
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0;
+}
 .setName {
   width: 98%;
   margin-top: 6px;

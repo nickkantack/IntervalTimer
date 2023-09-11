@@ -76,6 +76,7 @@ workoutPlayerBack.addEventListener("click", () => {
     if (indexOfCurrentSet > 0) {
         indexOfCurrentSet--;
         updatePlayer();
+        updatePlayAndPauseColors();
         updateTimeLeftVisibilities();
     } else {
         showToast("There is no earlier set to go back to.", TOAST_TYPE_FAILURE);
@@ -86,6 +87,7 @@ workoutPlayerNext.addEventListener("click", () => {
     if (indexOfCurrentSet < setList.children.length - 2) {
         indexOfCurrentSet++;
         updatePlayer();
+        updatePlayAndPauseColors();
         updateTimeLeftVisibilities();
     } else {
         showToast("There is no later set to advance to.", TOAST_TYPE_FAILURE);
@@ -202,8 +204,9 @@ loadWorkoutCancel.addEventListener("click", () => {
 function updatePlayer() {
     const currentSetDiv = setList.children[indexOfCurrentSet];
     currentSetTimeLeft.innerHTML = currentSetDiv.querySelector(".timeLeft").value;
-    currentSetName.innerHTML = currentSetDiv.querySelector(".setName").value;
-    nextSetName.innerHTML = indexOfCurrentSet === setList.children.length - 2 ? "" : setList.children[indexOfCurrentSet + 1].querySelector(".setName").value;
+    currentSetName.innerHTML = currentSetDiv.querySelector(".setName").value === "" ? "[blank]" : currentSetDiv.querySelector(".setName").value;
+    nextSetName.innerHTML = indexOfCurrentSet === setList.children.length - 2 ? "" : 
+        (setList.children[indexOfCurrentSet + 1].querySelector(".setName").value === "" ? "[blank]" : setList.children[indexOfCurrentSet + 1].querySelector(".setName").value);
     indexOfCurrentSet === setList.children.length - 2 ? upNextLabel.style.display = "none" : upNextLabel.style.display = "block";
 }
 
