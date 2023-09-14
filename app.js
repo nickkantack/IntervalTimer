@@ -54,7 +54,6 @@ let wakeLock = null;
 (async () => {
     try {
     wakeLock = await navigator.wakeLock.request("screen");
-    showToast("Wake lock acquired!", TOAST_TYPE_SUCCESS);
     } catch (err) {
     // The Wake Lock request has failed - usually system related, such as battery.
     console.error(`${err.name}, ${err.message}`);
@@ -193,6 +192,13 @@ loadWorkoutCancel.addEventListener("click", () => {
         if (isPlaying) return;
         isPlaying = true; 
         isPaused = false;
+
+        // If any sets were recently added, their timeLeft will have a blank value. They should now be
+        // given the value of their respective allocatedTime.
+        for (let setDiv of setList.querySelectorAll(".setDiv")) {
+            if (setDiv.querySelector(".timeLeft").value === "") setDiv.querySelector(".timeLeft").value = setDiv.querySelector(".allocatedTime").value;
+        }
+
         updatePlayAndPauseColors();
         updatePlayer();
         updateTimeLeftVisibilities();
@@ -347,4 +353,9 @@ function updatePlayAndPauseColors() {
     const currentSetName = setList.children[indexOfCurrentSet].querySelector(".setName");
     if (isPlaying) currentSetName.classList.add("currentSetPlaying");
     if (isPaused) currentSetName.classList.add("currentSetPaused");
+    // Player button visibilities
+    workoutPlayerPlay.style.display = isPlaying ? "none" : "inline";
+    workoutPlayerPause.style.display = isPlaying ? "inline" : "none";
+    // TODO find a better CSS way to do this
+    workoutPlayer.style.background = isPaused ? "#331" : "#222";
 }
