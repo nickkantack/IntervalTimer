@@ -19,7 +19,7 @@ const stopButton = document.getElementById("stop");
 const playButton = document.getElementById("play");
 const pauseButton = document.getElementById("pause");
 const workoutTitle = document.getElementById("workoutTitle");
-const workoutTitleLabel = document.getElementById("workoutTitleLabel");
+const workoutTitleUneditable = document.getElementById("workoutTitleUneditable");
 const workoutSelect = document.getElementById("workoutSelect");
 const loadButton = document.getElementById("loadWorkout");
 const saveButton = document.getElementById("saveWorkout");
@@ -80,15 +80,15 @@ backToEditor.addEventListener("click", () => {
     workoutPlayer.style.display = "none";
 });
 
-workoutTitleLabel.addEventListener("click", () => {
+workoutTitleUneditable.addEventListener("click", () => {
     workoutTitle.style.display = "inline";
     workoutTitle.focus();
-    workoutTitleLabel.style.display = "none";
+    workoutTitleUneditable.style.display = "none";
 });
 workoutTitle.addEventListener("focusout", () => {
     workoutTitle.style.display = "none";
-    workoutTitleLabel.style.display = "inline";
-    workoutTitleLabel.innerHTML = workoutTitle.value;
+    workoutTitleUneditable.style.display = "inline";
+    workoutTitleUneditable.innerHTML = workoutTitle.value;
 });
 
 workoutPlayerBack.addEventListener("click", () => {
@@ -143,7 +143,7 @@ saveButton.addEventListener("click", () => {
         return;
     }
     // TODO is there a concern with saving while the workoutSelect is showing?
-    workoutsDataObject[workoutTitleLabel.innerHTML] = convertCurrentWorkoutToArray();
+    workoutsDataObject[workoutTitleUneditable.innerHTML] = convertCurrentWorkoutToArray();
     window.localStorage.setItem(workoutKey, JSON.stringify(workoutsDataObject));
     showToast("Successfully saved!", TOAST_TYPE_SUCCESS);
 });

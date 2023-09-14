@@ -113,7 +113,20 @@ select {
 
 
 #workoutTitle {
+  width: 100%;
+  box-sizing: border-box;
   display :none;
+}
+#workoutTitleWrapper {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+}
+#workoutTitleLabel, #workoutTitleUneditable {
+  display: inline;
+}
+#workoutStorageControls {
+  float: right;
 }
 #workoutManagementBar button,
 #controlBar button {
@@ -125,7 +138,6 @@ select {
   float: right;
 }
 #workoutManagementBar div {
-  float: left;
   margin: 3px;
 }
 #workoutEditor {

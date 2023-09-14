@@ -14,9 +14,12 @@
 
     <!-- Workout management bar -->
     <div id="workoutManagementBar">
-      <div>Workout:</div>
-      <div id="workoutTitleLabel">Untitled workout</div>
-      <input id="workoutTitle" value="Untitled workout"/>
+      <div id="workoutTitleWrapper">
+        <div id="workoutTitleLabel">Workout:</div>
+        <div id="workoutTitleUneditable">Untitled workout</div>
+        <input id="workoutTitle" value="Untitled workout"/>
+      </div>
+      <div id="workoutStorageControls">
       <button id="loadWorkout">
         <svg viewBox="0 0 100 80">
           <path stroke="#666" stroke-width="5px" fill="#666" d="M10 10 V60 H70 V15 H40 L35 10 Z"/>
@@ -38,6 +41,7 @@
           <path stroke="none" fill="#666" d="M55 20 H80 V45 Z"/>
         </svg>
       </button>
+      </div>
     </div>
 
     <br/>
