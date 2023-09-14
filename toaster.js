@@ -27,7 +27,6 @@ function showToast(message, toastType, displayTimeOverride) {
 
 function hideToast() {
     toast.style.left = "-100%";
-    toast.classList.remove(`${toastType}Toast`);
     isToastShowing = false;
 }
 
