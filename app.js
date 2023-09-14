@@ -3,6 +3,7 @@ const VERSION = "v10";
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
+const isMutedKey = "IntervalTimer.isMusted";
 let workoutsDataObject = window.localStorage.getItem(workoutKey) ? window.localStorage.getItem(workoutKey) : "{}";
 workoutsDataObject = JSON.parse(workoutsDataObject);
 /*
@@ -27,6 +28,8 @@ const workoutSelect = document.getElementById("workoutSelect");
 const deleteWorkoutButton = document.getElementById("deleteWorkout");
 const loadButton = document.getElementById("loadWorkout");
 const saveButton = document.getElementById("saveWorkout");
+const muteButton = document.getElementById("mute");
+const unmuteButton = document.getElementById("unmute");
 const loadWorkoutCancel = document.getElementById("loadWorkoutCancel");
 const workoutLoadPage = document.getElementById("workoutLoadPage");
 const workoutPlayer = document.getElementById("workoutPlayer");
@@ -54,6 +57,10 @@ let isPlaying = false;
 let isPaused = false;
 let lastEpochMillisWhenDeleteWorkoutWasClicked;
 let lastEpochMillisWhenHeadingWasClicked;
+
+let isMuted = window.localStorage.getItem(isMutedKey) || false;
+const lowBeep = new Audio("./beep-low.wav");
+const highBeep = new Audio("./beep-high.wav");
 
 // Attempt to claim the wake lock
 let wakeLock = null;
@@ -141,7 +148,7 @@ deleteWorkoutButton.addEventListener("click", () => {
         clearCurrentWorkout();
         showToast("Workout deleted", TOAST_TYPE_SUCCESS);
     } else{
-        showToast("To delete a workout, double-tap the delete button", TOAST_TYPE_INFORMATION);
+        showToast("To delete this workout, double-tap the delete button", TOAST_TYPE_INFORMATION);
     }
     lastEpochMillisWhenDeleteWorkoutWasClicked = currentTime;
 });
@@ -180,6 +187,18 @@ saveButton.addEventListener("click", () => {
     workoutsDataObject[workoutTitleUneditable.innerHTML] = convertCurrentWorkoutToArray();
     window.localStorage.setItem(workoutKey, JSON.stringify(workoutsDataObject));
     showToast("Successfully saved!", TOAST_TYPE_SUCCESS);
+});
+
+muteButton.addEventListener("click", () => {
+    unmuteButton.style.display = "inline";
+    muteButton.style.display = "none";
+    isMuted = true;
+});
+
+unmuteButton.addEventListener("click", () => {
+    unmuteButton.style.display = "none";
+    muteButton.style.display = "inline";
+    isMuted = false;
 });
 
 addSetButton.addEventListener("click", () => {
@@ -262,7 +281,7 @@ function pauseWorkout(shouldShowToasts = true) {
                 currentTimeLeft.value = secondsToTimeString(secondsLeft - 1);
                 updatePlayer();
                 // If the time is sufficiently low, tick the player
-                if (secondsLeft < 10) tickPlayer();
+                if (secondsLeft < 5) tickPlayer();
             } else {
                 // Handle running out of time
                 updatePlayAndPauseColors();
@@ -276,6 +295,7 @@ function pauseWorkout(shouldShowToasts = true) {
                     updatePlayAndPauseColors();
                     updateTimeLeftVisibilities();
                     workoutPlayer.classList.add("workoutPlayerSetChanged");
+                    if (!isMuted) highBeep.play();
                     setTimeout(() => {
                         workoutPlayer.classList.remove("workoutPlayerSetChanged");
                     }, 3000);
@@ -287,6 +307,7 @@ function pauseWorkout(shouldShowToasts = true) {
 
 function tickPlayer() {
     workoutPlayer.classList.add("workoutPlayerTick");
+    if (!isMuted) lowBeep.play();
     setTimeout(() => {
         workoutPlayer.classList.remove("workoutPlayerTick");
         workoutPlayer.classList.remove("workoutPlayerSetChanged");
@@ -353,9 +374,9 @@ function addSetToList(setToAddBefore) {
 
 function getValidatedTime(entry) {
     if (/^[0-9]+$/.test(entry)) entry += ":00";
-    if (/^[0-9]+:$/.test(entry)) entry + "00";
+    if (/^[0-9]+:$/.test(entry)) entry = entry + "00";
     if (/^:[0-9]+$/.test(entry)) entry = "0" + entry;
-    if (/^[0-9]+:0$/.test(entry)) entry + "0";
+    if (/^[0-9]+:[0-9]$/.test(entry)) entry = entry + "0";
     if (/^[0-9]+:[0-9]{3,}/.test(entry)) entry = entry.match(/^[0-9]+:[0-9]{2}/)[0];
     if (/^[0-9]+:[0-9]+$/.test(entry)) {
         return entry;

@@ -14,7 +14,10 @@ const APP_STATIC_RESOURCES = [
   "/IntervalTimer/dialogEquipper.js",
   "/IntervalTimer/icon-192.png",
   "/IntervalTimer/icon-512.png",
+  "/IntervalTimer/main-icon.svg",
   "/IntervalTimer/style.css",
+  "/IntervalTimer/beep-low.wav",
+  "/IntervalTimer/beep-high.wav"
 ];
 
 // On install, cache the static resources

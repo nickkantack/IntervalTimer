@@ -170,6 +170,9 @@ select {
   display: inline;
   width: 100%;
 }
+#unmute {
+  display: none;
+}
 #workoutList {
   width: 100%;
   overflow-y: scroll;
