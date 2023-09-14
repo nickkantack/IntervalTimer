@@ -1,4 +1,6 @@
 
+const VERSION = "v8";
+
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
 let workoutsDataObject = window.localStorage.getItem(workoutKey) ? window.localStorage.getItem(workoutKey) : "{}";
@@ -14,6 +16,7 @@ The data stored under the key above should be in the format
 }
 */
 
+const heading = document.getElementById("heading");
 const addSetButton = document.getElementById("addSet");
 const stopButton = document.getElementById("stop");
 const playButton = document.getElementById("play");
@@ -50,6 +53,7 @@ let timerUpdateInterval;
 let isPlaying = false;
 let isPaused = false;
 let lastEpochMillisWhenDeleteWorkoutWasClicked;
+let lastEpochMillisWhenHeadingWasClicked;
 
 // Attempt to claim the wake lock
 let wakeLock = null;
@@ -62,6 +66,14 @@ let wakeLock = null;
     showToast(`There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use. ${err.name}: ${err.message}`, TOAST_TYPE_FAILURE);
     }
 })();
+
+heading.addEventListener("click", () => {
+    const currentTime = Date.now();
+    if (lastEpochMillisWhenHeadingWasClicked && (currentTime - lastEpochMillisWhenHeadingWasClicked) < 750) {
+        showToast(`App version is ${VERSION}`, TOAST_TYPE_INFORMATION);
+    }
+    lastEpochMillisWhenHeadingWasClicked = currentTime;
+});
 
 // If the wakelock is lost, try to get it back
 document.addEventListener("visibilitychange", async () => {
