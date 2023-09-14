@@ -51,13 +51,16 @@ let isPaused = false;
 
 // Attempt to claim the wake lock
 let wakeLock = null;
-try {
-  wakeLock = await navigator.wakeLock.request("screen");
-} catch (err) {
-  // The Wake Lock request has failed - usually system related, such as battery.
-  console.error(`${err.name}, ${err.message}`);
-  showToast("There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use.");
-}
+(async () => {
+    try {
+    wakeLock = await navigator.wakeLock.request("screen");
+    showToast("Wake lock acquired!", TOAST_TYPE_SUCCESS);
+    } catch (err) {
+    // The Wake Lock request has failed - usually system related, such as battery.
+    console.error(`${err.name}, ${err.message}`);
+    showToast(`There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use. ${err.name}: ${err.message}`, TOAST_TYPE_FAILURE);
+    }
+})();
 
 // If the wakelock is lost, try to get it back
 document.addEventListener("visibilitychange", async () => {

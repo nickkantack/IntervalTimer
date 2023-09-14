@@ -148,10 +148,10 @@
     <!-- This is to keep the screen alive -->
     <video id="keepAliveVideo" playsinline muted autoplay loop src="./blank_video.mp4" height=60></video>
 
-    <script src="./app.js" defer></script>
     <script src="./workoutSerializer.js" defer></script>
     <script src="./dialogEquipper.js" defer></script>
     <script src="./toaster.js" defer></script>
+    <script src="./app.js" defer></script>
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/IntervalTimer/sw.js",
