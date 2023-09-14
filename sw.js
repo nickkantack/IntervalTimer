@@ -1,5 +1,5 @@
 // The version of the cache.
-const VERSION = "v8";
+const VERSION = "v9";
 
 // The name of the cache
 const CACHE_NAME = `interval-timer-${VERSION}`;
