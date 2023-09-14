@@ -296,6 +296,9 @@ function addSetToList(setToAddBefore) {
     setName.addEventListener("focusout", updateDropdowns);
     const allocatedTime = setDiv.querySelector(".allocatedTime")
     allocatedTime.addEventListener("focusout", updateDropdowns);
+    allocatedTime.addEventListener("focusout", () => {
+        setDiv.querySelector(".timeLeft").value = allocatedTime.value;
+    });
     updateSingleDropdown(setDiv.querySelector(".setSelect"), false, DO_IGNORE_LAST);
     const select = setDiv.querySelector(".setSelect");
     // Make the select hide itself after being chosen
