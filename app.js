@@ -49,7 +49,24 @@ let timerUpdateInterval;
 let isPlaying = false;
 let isPaused = false;
 
-    openWorkoutPlayer.addEventListener("click", () => {
+// Attempt to claim the wake lock
+let wakeLock = null;
+try {
+  wakeLock = await navigator.wakeLock.request("screen");
+} catch (err) {
+  // The Wake Lock request has failed - usually system related, such as battery.
+  console.error(`${err.name}, ${err.message}`);
+  showToast("There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use.");
+}
+
+// If the wakelock is lost, try to get it back
+document.addEventListener("visibilitychange", async () => {
+  if (wakeLock !== null && document.visibilityState === "visible") {
+    wakeLock = await navigator.wakeLock.request("screen");
+  }
+});
+
+openWorkoutPlayer.addEventListener("click", () => {
     if (setList.children.length === 1) {
         showToast("Can't open the player on an empty workout.", TOAST_TYPE_FAILURE);
         return;
