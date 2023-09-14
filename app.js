@@ -1,5 +1,5 @@
 
-const VERSION = "v13";
+const VERSION = "v14";
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
@@ -59,8 +59,8 @@ let lastEpochMillisWhenDeleteWorkoutWasClicked;
 let lastEpochMillisWhenHeadingWasClicked;
 
 let isMuted = window.localStorage.getItem(isMutedKey) || false;
-const lowBeep = new Audio("/IntervalTimer/beep-low.wav");
-const highBeep = new Audio("/IntervalTimer/beep-high.wav");
+const lowBeep = document.querySelectorAll("audio")[1];
+const highBeep = document.querySelectorAll("audio")[0];
 
 // Attempt to claim the wake lock
 let wakeLock = null;
