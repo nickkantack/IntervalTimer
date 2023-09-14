@@ -1,5 +1,5 @@
 
-const VERSION = "v11";
+const VERSION = "v12";
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
@@ -59,8 +59,8 @@ let lastEpochMillisWhenDeleteWorkoutWasClicked;
 let lastEpochMillisWhenHeadingWasClicked;
 
 let isMuted = window.localStorage.getItem(isMutedKey) || false;
-const lowBeep = new Audio("./beep-low.wav");
-const highBeep = new Audio("./beep-high.wav");
+const lowBeep = new Audio("beep-low.wav");
+const highBeep = new Audio("beep-high.wav");
 
 // Attempt to claim the wake lock
 let wakeLock = null;
@@ -70,7 +70,7 @@ let wakeLock = null;
     } catch (err) {
     // The Wake Lock request has failed - usually system related, such as battery.
     console.error(`${err.name}, ${err.message}`);
-    showToast(`There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use. ${err.name}: ${err.message}`, TOAST_TYPE_FAILURE);
+    showToast(`There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use. ${err.name}: ${err.message}`, TOAST_TYPE_FAILURE, 10000);
     }
 })();
 
