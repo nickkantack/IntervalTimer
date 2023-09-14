@@ -22,9 +22,17 @@ function showToast(message, toastType, displayTimeOverride) {
     toast.style.left = "50%";
     if (isToastShowing) clearTimeout(toastHideTimeout);
     isToastShowing = true;
-    toastHideTimeout = setTimeout(() => {
-        toast.style.left = "-100%";
-        toast.classList.remove(`${toastType}Toast`);
-        isToastshowing = false;
-    }, displayTimeOverride ? displayTimeOverride : SHOW_DURATION_MS);
+    toastHideTimeout = setTimeout(hideToast, displayTimeOverride ? displayTimeOverride : SHOW_DURATION_MS);
 }
+
+function hideToast() {
+    toast.style.left = "-100%";
+    toast.classList.remove(`${toastType}Toast`);
+    isToastShowing = false;
+}
+
+// Clicking the toast clears it
+toast.addEventListener("click", () => {
+    clearTimeout(toastHideTimeout);
+    hideToast();
+});

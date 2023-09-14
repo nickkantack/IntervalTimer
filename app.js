@@ -188,6 +188,7 @@ stopButton.addEventListener("click", () => {
     isPlaying = false;
     isPaused = false;
     updateTimeLeftVisibilities();
+    showToast("Workout stopped. Timers were reset.", TOAST_TYPE_INFORMATION);
 });
 
 loadWorkoutCancel.addEventListener("click", () => {
@@ -203,6 +204,7 @@ loadWorkoutCancel.addEventListener("click", () => {
         isPaused = true;
         clearInterval(timerUpdateInterval);
         updatePlayAndPauseColors();
+        showToast("Workout paused.", TOAST_TYPE_INFORMATION);
     });
 });
 
@@ -213,6 +215,8 @@ loadWorkoutCancel.addEventListener("click", () => {
         if (isPlaying) return;
         isPlaying = true; 
         isPaused = false;
+
+        showToast("Workout is running", TOAST_TYPE_SUCCESS);
 
         // If any sets were recently added, their timeLeft will have a blank value. They should now be
         // given the value of their respective allocatedTime.
