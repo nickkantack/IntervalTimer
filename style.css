@@ -66,6 +66,7 @@ select {
 }
 .setSelect {
   display: none;
+  width: 60px;
 }
 .justOkButton {
   position: absolute;
@@ -90,7 +91,7 @@ select {
 .toast {
   border-radius: 7px;
   padding: 10px;
-  position: absolute;
+  position: fixed;
   bottom: 30px;
   width: 60%;
   left: -100%;
@@ -115,7 +116,7 @@ select {
   background: #663;
 }
 .workoutPlayer {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 100%;

@@ -1,5 +1,5 @@
 
-const VERSION = "v12";
+const VERSION = "v13";
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
@@ -59,8 +59,8 @@ let lastEpochMillisWhenDeleteWorkoutWasClicked;
 let lastEpochMillisWhenHeadingWasClicked;
 
 let isMuted = window.localStorage.getItem(isMutedKey) || false;
-const lowBeep = new Audio("beep-low.wav");
-const highBeep = new Audio("beep-high.wav");
+const lowBeep = new Audio("/IntervalTimer/beep-low.wav");
+const highBeep = new Audio("/IntervalTimer/beep-high.wav");
 
 // Attempt to claim the wake lock
 let wakeLock = null;
@@ -466,5 +466,5 @@ function updatePlayAndPauseColors() {
     workoutPlayerPlay.style.display = isPlaying ? "none" : "inline";
     workoutPlayerPause.style.display = isPlaying ? "inline" : "none";
     // TODO find a better CSS way to do this
-    isPaused ? workoutPlayer.classList.add("currentSetPaused") : workoutPlayer.classList.remove("currentSetPaused");
+    isPaused ? workoutPlayer.classList.add("workoutPlayerPaused") : workoutPlayer.classList.remove("workoutPlayerPaused");
 }
