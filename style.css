@@ -101,6 +101,10 @@ select {
 .successToast {
   background: #080;
 }
+.informationToast {
+  background: #bb0;
+  color: #000;
+}
 .failureToast {
   background: #B00;
 }
@@ -133,9 +137,6 @@ select {
   width: 2em;
   height: 2em;
   padding: 0;
-}
-#loadWorkout, #saveWorkout, #openWorkoutPlayer {
-  float: right;
 }
 #workoutManagementBar div {
   margin: 3px;

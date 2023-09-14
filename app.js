@@ -21,6 +21,7 @@ const pauseButton = document.getElementById("pause");
 const workoutTitle = document.getElementById("workoutTitle");
 const workoutTitleUneditable = document.getElementById("workoutTitleUneditable");
 const workoutSelect = document.getElementById("workoutSelect");
+const deleteWorkoutButton = document.getElementById("deleteWorkout");
 const loadButton = document.getElementById("loadWorkout");
 const saveButton = document.getElementById("saveWorkout");
 const loadWorkoutCancel = document.getElementById("loadWorkoutCancel");
@@ -48,6 +49,7 @@ let indexOfCurrentSet = 0;
 let timerUpdateInterval;
 let isPlaying = false;
 let isPaused = false;
+let lastEpochMillisWhenDeleteWorkoutWasClicked;
 
 // Attempt to claim the wake lock
 let wakeLock = null;
@@ -111,6 +113,25 @@ workoutPlayerNext.addEventListener("click", () => {
     } else {
         showToast("There is no later set to advance to.", TOAST_TYPE_FAILURE);
     }
+});
+
+deleteWorkoutButton.addEventListener("click", () => {
+    const currentTime = Date.now();
+    // If the current name for the workout doesn't match an existing workout, don't delete
+    if (!workoutsDataObject.hasOwnProperty(workoutTitleUneditable.innerHTML)) {
+        showToast("Cannot delete the current workout since it isn't saved. Reload a workout if you need to delete it, but only after saving the current workout if you want to keep it.", TOAST_TYPE_FAILURE, 6000);
+        return;
+    }
+    if (lastEpochMillisWhenDeleteWorkoutWasClicked && (currentTime - lastEpochMillisWhenDeleteWorkoutWasClicked < 750)) {
+        // Delete the workout
+        delete workoutsDataObject[workoutTitleUneditable.innerHTML];
+        window.localStorage.setItem(workoutKey, JSON.stringify(workoutsDataObject));
+        clearCurrentWorkout();
+        showToast("Workout deleted", TOAST_TYPE_SUCCESS);
+    } else{
+        showToast("To delete a workout, double-tap the delete button", TOAST_TYPE_INFORMATION);
+    }
+    lastEpochMillisWhenDeleteWorkoutWasClicked = currentTime;
 });
 
 loadButton.addEventListener("click", () => {

@@ -1,13 +1,14 @@
 
 const toast = document.getElementById("toast");
 const TOAST_TYPE_SUCCESS = "success";
+const TOAST_TYPE_INFORMATION = "information";
 const TOAST_TYPE_FAILURE = "failure";
-const KNOWN_TOAST_TYPES = [TOAST_TYPE_SUCCESS, TOAST_TYPE_FAILURE];
+const KNOWN_TOAST_TYPES = [TOAST_TYPE_SUCCESS, TOAST_TYPE_INFORMATION, TOAST_TYPE_FAILURE];
 const SHOW_DURATION_MS = 4000;
 let isToastShowing = false;
 let toastHideTimeout;
 
-function showToast(message, toastType) {
+function showToast(message, toastType, displayTimeOverride) {
     toast.innerHTML = message;
 
     // Premeptively remove all classes except for the toast class
@@ -25,5 +26,5 @@ function showToast(message, toastType) {
         toast.style.left = "-100%";
         toast.classList.remove(`${toastType}Toast`);
         isToastshowing = false;
-    }, SHOW_DURATION_MS);
+    }, displayTimeOverride ? displayTimeOverride : SHOW_DURATION_MS);
 }

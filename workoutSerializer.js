@@ -18,8 +18,9 @@ function convertCurrentWorkoutToArray() {
 }
 
 function applyWorkoutAsArrayToApp(workoutTitle, workoutAsArray) {
-    workoutTitleLabel.innerHTML = workoutTitle;
-    for (let oldSet of setList.querySelectorAll(".setDiv")) setList.removeChild(oldSet);
+    clearCurrentWorkout();
+    workoutTitle.value = workoutTitle;
+    workoutTitleUneditable.innerHTML = workoutTitle;
     for (let list of workoutAsArray) {
         const setDiv = addSetToList();
         setDiv.querySelector(".setName").value = list[0];
@@ -27,4 +28,10 @@ function applyWorkoutAsArrayToApp(workoutTitle, workoutAsArray) {
         setDiv.querySelector(".allocatedTime").value = list[1];
     }
     // TODO do we need to update the dropdowns now? I think not.
+}
+
+function clearCurrentWorkout() {
+    workoutTitle.value = "Untitled workout";
+    workoutTitleUneditable.innerHTML = "Untitled workout";
+    for (let oldSet of setList.querySelectorAll(".setDiv")) setList.removeChild(oldSet);
 }
