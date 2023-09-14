@@ -147,7 +147,7 @@ deleteWorkoutButton.addEventListener("click", () => {
 });
 
 loadButton.addEventListener("click", () => {
-    pauseButton.click();
+    pauseWorkout(false);
     // Create a select for each workout found from storage
     if (Object.keys(workoutsDataObject).length === 0) {
         showToast("Cannot load a workout because there are no workouts saved on this device.", TOAST_TYPE_FAILURE);
@@ -168,6 +168,7 @@ workoutSelect.addEventListener("change", () => {
     workoutLoadPage.style.display = "none";
     workoutEditor.style.display = "block";
     applyWorkoutAsArrayToApp(workoutSelect.value, workoutsDataObject[workoutSelect.value]);
+    updateDropdowns();
 });
 
 saveButton.addEventListener("click", () => {
@@ -215,17 +216,21 @@ loadWorkoutCancel.addEventListener("click", () => {
 // Pausing merely stops the timer and changes the UI to indicate currently paused
 [pauseButton, workoutPlayerPause].forEach((button) => {
     button.addEventListener("click", () => {
-        if (setList.children.length === 1) {
-            showToast("No need to pause an empty workout.", TOAST_TYPE_INFORMATION);
-            return;
-        }
-        isPlaying = false;
-        isPaused = true;
-        clearInterval(timerUpdateInterval);
-        updatePlayAndPauseColors();
-        showToast("Workout paused.", TOAST_TYPE_INFORMATION);
+        pauseWorkout(true);
     });
 });
+
+function pauseWorkout(shouldShowToasts = true) {
+    if (setList.children.length === 1) {
+        if (shouldShowToasts) showToast("No need to pause an empty workout.", TOAST_TYPE_INFORMATION);
+        return;
+    }
+    isPlaying = false;
+    isPaused = true;
+    clearInterval(timerUpdateInterval);
+    updatePlayAndPauseColors();
+    if (shouldShowToasts) showToast("Workout paused.", TOAST_TYPE_INFORMATION);
+}
 
 // Pressing the play button starts the timer
 [playButton, workoutPlayerPlay].forEach((button) => {
@@ -284,6 +289,7 @@ function tickPlayer() {
     workoutPlayer.classList.add("workoutPlayerTick");
     setTimeout(() => {
         workoutPlayer.classList.remove("workoutPlayerTick");
+        workoutPlayer.classList.remove("workoutPlayerSetChanged");
     }, 250);
 }
 
