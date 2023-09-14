@@ -62,7 +62,12 @@
         </button>
       </div>
       <div id="setList">
-        <button id="addSet">+</button>
+        <button id="addSet">
+          <svg viewBox="0 0 100 100">
+            <path stroke="#666" stroke-width="16px" fill="none" d="M10 50 H90"/>
+            <path stroke="#666" stroke-width="16px" fill="none" d="M50 90 V10"/>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -117,7 +122,7 @@
 
     <template id="setTemplate">
       <div class="setDiv">
-        <input class="setName"/>
+        <input class="setName" placeholder="Name of set"/>
         <select class="setSelect"></select>
         <button class="editSet">
           <svg viewBox="0 0 100 100">
@@ -134,7 +139,9 @@
         <input class="timeLeft" value=""/>
         <button class="insertAbove">
           <svg viewBox="0 0 100 100">
-            <path stroke="none" fill="#666" d="M30 80 V50 H10 L50 10 L90 50 H70 V80 Z"/>
+            <path stroke="none" fill="#666" d="M30 50 V30 H10 L50 0 L90 30 H70 V50 Z"/>
+            <path stroke="#666" stroke-width="10px" fill="none" d="M32.5 72.5 H67.5"/>
+            <path stroke="#666" stroke-width="10px" fill="none" d="M50 90 V55"/>
           </svg>
         </button>
         <button class="deleteButton">

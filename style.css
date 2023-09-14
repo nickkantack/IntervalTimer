@@ -36,6 +36,7 @@ select {
 
 .setDiv {
   width: 100%;
+  border-bottom: 1px solid #666;
 }
 .setDiv button {
   width: 2em;
@@ -43,8 +44,9 @@ select {
   padding: 0;
 }
 .setName {
-  width: 98%;
+  width: 100%;
   margin-top: 6px;
+  box-sizing: border-box;
 }
 .timeLeft {
   display: none;
@@ -137,10 +139,20 @@ select {
   width: 100%;
   overflow-y: scroll;
 }
+#setList {
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+}
 #addSet {
   width: 100%;
+  height: 1.5em;
   font-size: 24px;
   border-width: 0;
+}
+/* This applies just to the svg for the add set button */
+#addSet svg {
+  width: 1.5em;
+  height: 1.5em;
 }
 #workoutLoadPage {
   display: none;
