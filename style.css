@@ -114,6 +114,27 @@ select {
 .currentSetPaused {
   background: #663;
 }
+.workoutPlayer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: #222;
+  display: none;
+  background: #222;
+  transition: 0.15s;
+}
+.workoutPlayerPaused {
+  background-color: #331;
+}
+.workoutPlayerSetChanged {
+  background-color: #080;
+}
+.workoutPlayerTick {
+  background-color: #B00;
+}
 
 
 #workoutTitle {
@@ -170,16 +191,6 @@ select {
 #workoutLoadPage {
   display: none;
   width: 100%;
-}
-#workoutPlayer {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  background: #222;
-  display: none;
 }
 #workoutPlayer button {
   width: 2em;

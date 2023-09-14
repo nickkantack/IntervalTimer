@@ -246,6 +246,8 @@ loadWorkoutCancel.addEventListener("click", () => {
             if (secondsLeft > 0) {
                 currentTimeLeft.value = secondsToTimeString(secondsLeft - 1);
                 updatePlayer();
+                // If the time is sufficiently low, tick the player
+                if (secondsLeft < 10) tickPlayer();
             } else {
                 // Handle running out of time
                 updatePlayAndPauseColors();
@@ -258,11 +260,22 @@ loadWorkoutCancel.addEventListener("click", () => {
                     indexOfCurrentSet++;
                     updatePlayAndPauseColors();
                     updateTimeLeftVisibilities();
+                    workoutPlayer.classList.add("workoutPlayerSetChanged");
+                    setTimeout(() => {
+                        workoutPlayer.classList.remove("workoutPlayerSetChanged");
+                    }, 3000);
                 }
             }
         }, 1000);
     });
 });
+
+function tickPlayer() {
+    workoutPlayer.classList.add("workoutPlayerTick");
+    setTimeout(() => {
+        workoutPlayer.classList.remove("workoutPlayerTick");
+    }, 250);
+}
 
 function updatePlayer() {
     const currentSetDiv = setList.children[indexOfCurrentSet];
@@ -394,5 +407,5 @@ function updatePlayAndPauseColors() {
     workoutPlayerPlay.style.display = isPlaying ? "none" : "inline";
     workoutPlayerPause.style.display = isPlaying ? "inline" : "none";
     // TODO find a better CSS way to do this
-    workoutPlayer.style.background = isPaused ? "#331" : "#222";
+    isPaused ? workoutPlayer.classList.add("currentSetPaused") : workoutPlayer.classList.remove("currentSetPaused");
 }
