@@ -20,7 +20,7 @@
         <input id="workoutTitle" value="Untitled workout"/>
       </div>
       <div id="workoutStorageControls">
-        <button id="deleteWorkout">
+        <button id="deleteWorkout" title="Delete workout">
           <svg viewBox="0 0 100 100">
             <path stroke="#666" fill="none" stroke-width="5px" d="M30 80 L25 35 H75 L70 80 Z"/>
             <path stroke="#666" fill="none" stroke-width="5px" d="M20 35 V25 H80 V35 Z"/>
@@ -29,13 +29,13 @@
             <path stroke="#666" fill="none" stroke-width="8px" d="M59 80 L61 50"/>
           </svg>
         </button>
-        <button id="loadWorkout">
+        <button id="loadWorkout" title="Load workout">
           <svg viewBox="0 0 100 65">
             <path stroke="#666" stroke-width="5px" fill="#666" d="M10 10 V60 H70 V15 H40 L35 10 Z"/>
             <path stroke="#666" stroke-width="5px" fill="none" d="M70 57 L90 25 H50 Z"/>
           </svg>
         </button>
-        <button id="saveWorkout">
+        <button id="saveWorkout" title="Save workout">
           <svg viewBox="0 0 100 80">
             <path stroke="#666" stroke-width="5px" fill="none" d="M20 70 H70 V20 L60 10 H20 Z"/>
             <path stroke="none" fill="#666" d="M30 40 H60 V10 H30 Z"/>
@@ -43,7 +43,7 @@
             <path stroke="none" fill="#666" d="M30 70 H60 V60 H30 Z"/>
           </svg>
         </button>
-        <button id="openWorkoutPlayer">
+        <button id="openWorkoutPlayer" title="Open player view">
           <svg viewBox="0 0 100 80">
             <path stroke="#666" fill="none" stroke-width="5px" d="M20 70 A10,10 0 0 1 10,60 V20 A10,10 0 0 1 20,10 H80 A10,10 0 0 1 90,20 V60 A10,10 0 0 1 80,70 Z"/>
             <path stroke="none" fill="#666" d="M45 60 H20 V35 Z"/>
@@ -57,25 +57,25 @@
     <br/>
     <div id="workoutEditor">
       <div id="controlBar">
-        <button id="play">
+        <button id="play" title="Start workout">
           <svg viewBox="0 0 100 100">
             <path stroke="none" fill="#666" d="M20 20 V80 L80 50 Z"/>
           </svg>
         </button>
-        <button id="pause">
+        <button id="pause" title="Pause workout">
           <svg viewBox="0 0 100 100">
             <path stroke="none" fill="#666" d="M20 20 V80 H40 V20 Z"/>
             <path stroke="none" fill="#666" d="M60 20 V80 H80 V20 Z"/>
           </svg>
         </button>
-        <button id="stop">
+        <button id="stop" title="Stop workout">
           <svg viewBox="0 0 100 100">
             <path stroke="none" fill="#666" d="M20 20 V80 H80 V20 Z"/>
           </svg>
         </button>
       </div>
       <div id="setList">
-        <button id="addSet">
+        <button id="addSet" title="Add new set">
           <svg viewBox="0 0 100 100">
             <path stroke="#666" stroke-width="16px" fill="none" d="M10 50 H90"/>
             <path stroke="#666" stroke-width="16px" fill="none" d="M50 90 V10"/>
@@ -91,24 +91,24 @@
         <div id="upNextLabel">up next:</div>
         <div id="nextSetName">next set</div>
         <div id="workoutPlayerControls">
-          <button id="workoutPlayerBack">
+          <button id="workoutPlayerBack" title="Restart previous set">
             <svg viewBox="0 0 100 100">
               <path stroke="none" fill="#666" d="M10 80 V20 H20 V80 Z"/>
               <path stroke="none" fill="#666" d="M30 50 L80 20 V80 Z"/>
             </svg>
           </button>
-          <button id="workoutPlayerPause">
+          <button id="workoutPlayerPause" title="Pause timer">
             <svg viewBox="0 0 100 100">
               <path stroke="none" fill="#666" d="M20 20 V80 H40 V20 Z"/>
               <path stroke="none" fill="#666" d="M60 20 V80 H80 V20 Z"/>
             </svg>
           </button>
-          <button id="workoutPlayerPlay">
+          <button id="workoutPlayerPlay" title="Resume workout">
             <svg viewBox="0 0 100 100">
               <path stroke="none" fill="#666" d="M20 20 V80 L80 50 Z"/>
             </svg>
           </button>
-          <button id="workoutPlayerNext">
+          <button id="workoutPlayerNext" title="Skip to next set">
             <svg viewBox="0 0 100 100">
               <path stroke="none" fill="#666" d="M80 80 V20 H90 V80 Z"/>
               <path stroke="none" fill="#666" d="M70 50 L20 20 V80 Z"/>
@@ -141,7 +141,7 @@
       <div class="setDiv">
         <input class="setName" placeholder="Enter name of set"/>
         <select class="setSelect"></select>
-        <button class="editSet">
+        <button class="editSet" title="Copy details from other set">
           <svg viewBox="0 0 100 100">
             <path stroke="#666" stroke-width="14px" d="M20 80 L55 45"/>
             <path stroke="#666" stroke-width="14px" d="M60 40 L75 25"/>
@@ -154,23 +154,20 @@
         <input class="allocatedTime" value="2:00"/>
         <span class="forwardSlash">/</span>
         <input class="timeLeft" value=""/>
-        <button class="insertAbove">
+        <button class="insertAbove" title="Add a set before this one">
           <svg viewBox="0 0 100 100">
             <path stroke="none" fill="#666" d="M30 50 V30 H10 L50 0 L90 30 H70 V50 Z"/>
             <path stroke="#666" stroke-width="10px" fill="none" d="M32.5 72.5 H67.5"/>
             <path stroke="#666" stroke-width="10px" fill="none" d="M50 90 V55"/>
           </svg>
         </button>
-        <button class="deleteButton">
+        <button class="deleteButton" title="Delete set">
           <svg viewBox="0 0 100 100">
             <path stroke="#666" stroke-width="10px" d="M20 20 L80 80 M20 80 L80 20"/>
           </svg>
         </button>
       </div>
     </template>
-
-    <!-- This is to keep the screen alive -->
-    <video id="keepAliveVideo" playsinline muted autoplay loop src="./blank_video.mp4" height=60></video>
 
     <script src="./workoutSerializer.js" defer></script>
     <script src="./dialogEquipper.js" defer></script>

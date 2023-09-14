@@ -200,7 +200,11 @@ stopButton.addEventListener("click", () => {
     isPlaying = false;
     isPaused = false;
     updateTimeLeftVisibilities();
-    showToast("Workout stopped. Timers were reset.", TOAST_TYPE_INFORMATION);
+    if (setList.children.length === 1) {
+        showToast("No need to stop an empty workout.", TOAST_TYPE_INFORMATION);
+    } else {
+        showToast("Workout stopped. Timers were reset.", TOAST_TYPE_INFORMATION);
+    }
 });
 
 loadWorkoutCancel.addEventListener("click", () => {
@@ -211,7 +215,10 @@ loadWorkoutCancel.addEventListener("click", () => {
 // Pausing merely stops the timer and changes the UI to indicate currently paused
 [pauseButton, workoutPlayerPause].forEach((button) => {
     button.addEventListener("click", () => {
-        if (setList.children.length === 1) return; // Nothing to do since there are no sets
+        if (setList.children.length === 1) {
+            showToast("No need to pause an empty workout.", TOAST_TYPE_INFORMATION);
+            return;
+        }
         isPlaying = false;
         isPaused = true;
         clearInterval(timerUpdateInterval);
@@ -223,7 +230,10 @@ loadWorkoutCancel.addEventListener("click", () => {
 // Pressing the play button starts the timer
 [playButton, workoutPlayerPlay].forEach((button) => {
     button.addEventListener("click", () => {
-        if (setList.children.length === 1) return; // Nothing to do since there are no sets
+        if (setList.children.length === 1) {
+            showToast("Can't start timers for an empty workout.", TOAST_TYPE_FAILURE);
+            return; 
+        }
         if (isPlaying) return;
         isPlaying = true; 
         isPaused = false;
@@ -295,15 +305,20 @@ function addSetToList(setToAddBefore) {
     const setName = setDiv.querySelector(".setName")
     setName.addEventListener("focusout", updateDropdowns);
     const allocatedTime = setDiv.querySelector(".allocatedTime")
-    allocatedTime.addEventListener("focusout", updateDropdowns);
     allocatedTime.addEventListener("focusout", () => {
+        allocatedTime.value = getValidatedTime(allocatedTime.value);
         setDiv.querySelector(".timeLeft").value = allocatedTime.value;
+        updateDropdowns();
     });
     updateSingleDropdown(setDiv.querySelector(".setSelect"), false, DO_IGNORE_LAST);
     const select = setDiv.querySelector(".setSelect");
     // Make the select hide itself after being chosen
     const editSet = setDiv.querySelector(".editSet");
     editSet.addEventListener("click", () => {
+        if (setList.children.length === 2) {
+            showToast("Can't copy from another set because there are no other sets.", TOAST_TYPE_FAILURE);
+            return;
+        }
         select.style.display = "inline";
         select.focus();
         editSet.style.display = "none";
@@ -328,6 +343,20 @@ function addSetToList(setToAddBefore) {
         addSetToList(setDiv);
     });
     return setDiv;
+}
+
+function getValidatedTime(entry) {
+    if (/^[0-9]+$/.test(entry)) entry += ":00";
+    if (/^[0-9]+:$/.test(entry)) entry + "00";
+    if (/^:[0-9]+$/.test(entry)) entry = "0" + entry;
+    if (/^[0-9]+:0$/.test(entry)) entry + "0";
+    if (/^[0-9]+:[0-9]{3,}/.test(entry)) entry = entry.match(/^[0-9]+:[0-9]{2}/)[0];
+    if (/^[0-9]+:[0-9]+$/.test(entry)) {
+        return entry;
+    } else {
+        showToast("Invalid time entry. Acceptable format is minutes:seconds", TOAST_TYPE_FAILURE);
+        return "1:00";
+    }
 }
 
 function timeStringToSeconds(timeString) {
