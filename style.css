@@ -127,6 +127,7 @@ select {
   display: none;
   background: #222;
   transition: 0.15s;
+  z-index: 1;
 }
 .workoutPlayerPaused {
   background-color: #331;
@@ -228,5 +229,6 @@ select {
   margin-top: 20px;
 }
 #keepAliveVideo {
-  position: fixed;
+  position: absolute;
+  z-index: 0;
 }
