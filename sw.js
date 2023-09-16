@@ -1,5 +1,5 @@
 // The version of the cache.
-const VERSION = "v16";
+const VERSION = "v17";
 
 // The name of the cache
 const CACHE_NAME = `interval-timer-${VERSION}`;
@@ -68,7 +68,7 @@ self.addEventListener("fetch", (event) => {
       } else {
         // If resource isn't in the cache, return a 404.
         console.log(event);
-        console.log(cache);
+        console.log(cache.keys());
         console.log("This is the service worker intentionally returning a 404");
         return new Response(null, { status: 404 });
       }
