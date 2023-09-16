@@ -62,17 +62,7 @@ let isMuted = window.localStorage.getItem(isMutedKey) || false;
 let lowBeep;
 let highBeep;
 
-// Attempt to claim the wake lock
 let wakeLock = null;
-(async () => {
-    try {
-    wakeLock = await navigator.wakeLock.request("screen");
-    } catch (err) {
-    // The Wake Lock request has failed - usually system related, such as battery.
-    console.error(`${err.name}, ${err.message}`);
-    showToast(`There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use. ${err.name}: ${err.message}`, TOAST_TYPE_FAILURE, 10000);
-    }
-})();
 
 heading.addEventListener("click", () => {
     const currentTime = Date.now();
@@ -207,6 +197,7 @@ addSetButton.addEventListener("click", () => {
 
 // Pressing the stop button sets all of the timeLeft inputs equal to their allocatedTime counterpart
 stopButton.addEventListener("click", () => {
+    releaseWakeLock();
     for (let setDiv of setList.children) {
         if (!setDiv.querySelector(".setName")) continue;
         const timeLeft = setDiv.getElementsByClassName("timeLeft")[0];
@@ -240,6 +231,7 @@ loadWorkoutCancel.addEventListener("click", () => {
 });
 
 function pauseWorkout(shouldShowToasts = true) {
+    releaseWakeLock();
     if (setList.children.length === 1) {
         if (shouldShowToasts) showToast("No need to pause an empty workout.", TOAST_TYPE_INFORMATION);
         return;
@@ -254,6 +246,8 @@ function pauseWorkout(shouldShowToasts = true) {
 // Pressing the play button starts the timer
 [playButton, workoutPlayerPlay].forEach((button) => {
     button.addEventListener("click", () => {
+
+        acquireWakeLockIfNeeded();
 
         // No matter what, we can load the audio now
         if (!lowBeep) lowBeep = document.getElementById("beepLow");
@@ -472,4 +466,31 @@ function updatePlayAndPauseColors() {
     workoutPlayerPause.style.display = isPlaying ? "inline" : "none";
     // TODO find a better CSS way to do this
     isPaused ? workoutPlayer.classList.add("workoutPlayerPaused") : workoutPlayer.classList.remove("workoutPlayerPaused");
+}
+
+function releaseWakeLock() {
+    if (wakeLock) {
+            wakeLock.release().then(() => {
+        wakeLock = null;
+        });
+    }
+}
+
+function acquireWakeLockIfNeeded() {
+    (async () => {
+        if (wakeLock) return;
+        try {
+            wakeLock = await navigator.wakeLock.request("screen");
+            wakeLock.addEventListener("release", () => {
+                wakeLock = null;
+            });
+        } catch (err) {
+            // The Wake Lock request has failed - usually system related, such as battery.
+            console.error(`${err.name}, ${err.message}`);
+            // Setting a timeout for now so that we can show this toast after any play-related toast
+            setTimeout(() => {
+                showToast(`There was a problem getting permission from your device to keep the screen on. The screen may turn off during app use. ${err.name}: ${err.message}`, TOAST_TYPE_FAILURE, 10000);
+            }, 500);
+        }
+    })();
 }
