@@ -98,6 +98,7 @@ select {
   transform: translate(-50%, 0);
   transition: 0.5s;
   box-shadow: 3px 3px 3px #000;
+  z-index: 2;
 }
 .successToast {
   background: #080;

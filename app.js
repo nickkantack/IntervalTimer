@@ -1,5 +1,5 @@
 
-const VERSION = "v20";
+const VERSION = "v21";
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
