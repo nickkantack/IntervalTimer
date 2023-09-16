@@ -227,3 +227,7 @@ select {
   font-style: italic;
   margin-top: 20px;
 }
+#keepAliveVideo {
+  position: fixed;
+  left: 100%;
+}

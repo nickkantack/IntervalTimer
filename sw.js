@@ -1,5 +1,5 @@
 // The version of the cache.
-const VERSION = "v14";
+const VERSION = "v15";
 
 // The name of the cache
 const CACHE_NAME = `interval-timer-${VERSION}`;
@@ -17,7 +17,8 @@ const APP_STATIC_RESOURCES = [
   "/IntervalTimer/main-icon.svg",
   "/IntervalTimer/style.css",
   "/IntervalTimer/beep-low.wav",
-  "/IntervalTimer/beep-high.wav"
+  "/IntervalTimer/beep-high.wav",
+  "/IntervalTimer/blank_video.mp4"
 ];
 
 // On install, cache the static resources
