@@ -171,7 +171,7 @@ select {
   display: inline;
   width: 100%;
 }
-#unmute {
+#mute {
   display: none;
 }
 #workoutList {
@@ -229,5 +229,4 @@ select {
 }
 #keepAliveVideo {
   position: fixed;
-  left: 100%;
 }

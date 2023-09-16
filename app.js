@@ -1,5 +1,5 @@
 
-const VERSION = "v15";
+const VERSION = "v16";
 
 const DO_IGNORE_LAST = true;
 const workoutKey = "IntervalTimer.workouts";
@@ -59,8 +59,8 @@ let lastEpochMillisWhenDeleteWorkoutWasClicked;
 let lastEpochMillisWhenHeadingWasClicked;
 
 let isMuted = window.localStorage.getItem(isMutedKey) || false;
-const lowBeep = document.querySelectorAll("audio")[1];
-const highBeep = document.querySelectorAll("audio")[0];
+let lowBeep;
+let highBeep;
 
 // Attempt to claim the wake lock
 let wakeLock = null;
@@ -254,6 +254,11 @@ function pauseWorkout(shouldShowToasts = true) {
 // Pressing the play button starts the timer
 [playButton, workoutPlayerPlay].forEach((button) => {
     button.addEventListener("click", () => {
+
+        // No matter what, we can load the audio now
+        if (!lowBeep) lowBeep = document.getElementById("beepLow");
+        if (!highBeep) highBeep = document.getElementById("beepHigh");
+
         if (setList.children.length === 1) {
             showToast("Can't start timers for an empty workout.", TOAST_TYPE_FAILURE);
             return; 
